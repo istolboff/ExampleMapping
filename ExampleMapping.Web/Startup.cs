@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.Contracts;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using ExampleMapping.Web.Models;
 
 namespace ExampleMapping.Web
 {
@@ -25,6 +25,10 @@ namespace ExampleMapping.Web
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
+
+            Contract.Assume(_sqliteDatabaseFile == null);
+            _sqliteDatabaseFile = EnsureDatabaseCreated(env);
+
             Configuration = builder.Build();
         }
 
@@ -33,9 +37,9 @@ namespace ExampleMapping.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
+            Contract.Assume(_sqliteDatabaseFile != null);
+            services.AddDbContext<ExampleMappingContext>(options => options.UseSqlite(@"Data Source=" + _sqliteDatabaseFile.FullName));
             services.AddApplicationInsightsTelemetry(Configuration);
-
             services.AddMvc();
         }
 
@@ -68,5 +72,21 @@ namespace ExampleMapping.Web
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
+        private FileInfo EnsureDatabaseCreated(IHostingEnvironment env)
+        {
+            var contentRootDirectory = new DirectoryInfo(env.ContentRootPath);
+            var databaseDirectory = contentRootDirectory.CreateSubdirectory("DataBase");
+            var result = new FileInfo(Path.Combine(databaseDirectory.FullName, "ExampleMapping.sqlite"));
+            using (var db = new SelfCreatingExampleMappingContext(result))
+            {
+                db.Database.EnsureCreated();
+                db.Database.Migrate();
+            }
+
+            return result;
+        }
+
+        private FileInfo _sqliteDatabaseFile;
     }
 }

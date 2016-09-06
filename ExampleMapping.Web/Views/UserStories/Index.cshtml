@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ExampleMapping.Web.Models.UserStory>
+
+@{
+    ViewBag.Title = "User Stories";
+}
+
+<h2>User Stories</h2>
+
+<p>
+    <a asp-controller="UserStories" asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Name</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+        </tr>
+    }
+</table>
