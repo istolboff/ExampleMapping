@@ -1,0 +1,26 @@
+﻿@model ExampleMapping.Web.Models.UserStory
+
+@{
+    ViewBag.Title = "Edit User Story";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="UserStories" asp-action="Edit" method="post" class="form-horizontal" role="form">
+    <div class="form-horizontal">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="UserStoryId" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>

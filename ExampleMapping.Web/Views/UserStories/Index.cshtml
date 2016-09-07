@@ -13,6 +13,7 @@
 <table class="table">
     <tr>
         <th>Name</th>
+        <th>Edit</th>
     </tr>
 
     @foreach (var item in Model)
@@ -20,6 +21,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.UserStoryId">Edit</a>
             </td>
         </tr>
     }
