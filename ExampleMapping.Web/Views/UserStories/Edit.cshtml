@@ -1,13 +1,1 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
-@using ExampleMapping.Web.Views
-@model ExampleMapping.Web.Models.UserStory
-
-@{
-    ViewBag.Title = "Edit User Story";
-}
-
-<h2>@ViewData["Title"]</h2>
-
-<form asp-controller="UserStories" asp-action="Edit" method="post" class="form-horizontal" role="form">
-    @Html.Partial("EditPartial", new ViewDataDictionary(ViewData) { { "ViewType", ViewType.EditExisting } })
-</form>
+﻿@Html.Partial("EditPartial", new ViewDataDictionary(ViewData) { { "ViewType", ExampleMapping.Web.Views.ViewType.EditExisting } })
