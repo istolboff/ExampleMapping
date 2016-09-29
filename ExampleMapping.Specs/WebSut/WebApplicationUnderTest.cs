@@ -1,32 +1,35 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using OpenQA.Selenium;
-using ExampleMapping.Specs.WebSut.Pages;
+using WatiN.Core;
 
 namespace ExampleMapping.Specs.WebSut
 {
-    internal sealed class WebApplicationUnderTest
+    public sealed class WebApplicationUnderTest : IDisposable
     {
-        public WebApplicationUnderTest(IWebDriver webDriver, int portNumber)
+        public WebApplicationUnderTest(Browser browser, int portNumber)
         {
-            Contract.Requires(webDriver != null);
+            Contract.Requires(_browser != null);
+            Contract.Requires(portNumber >= 0);
 
-            _webDriver = webDriver;
+            _browser = browser;
             PortNumber = portNumber;
+            _webProjectUrl = $"http://localhost:{portNumber}/UserStories";
         }
 
         public int PortNumber { get; }
 
-        public TPage NavigateTo<TPage>() where TPage : PageBase
+        public TPage NavigateTo<TPage>() where TPage : class 
         {
-            return Activator.CreateInstance(typeof(TPage), _webDriver) as TPage;
+            return Activator.CreateInstance(typeof(TPage), _browser, _webProjectUrl) as TPage;
         }
 
-        public void Stop()
+        public void Dispose()
         {
-            _webDriver.Quit();
+            _browser.Close();
+            _browser.Dispose();
         }
 
-        private readonly IWebDriver _webDriver;
+        private readonly Browser _browser;
+        private readonly string _webProjectUrl;
     }
 }

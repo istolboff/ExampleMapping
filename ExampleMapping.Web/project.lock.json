@@ -3,6 +3,18 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
+      "JetBrains.Annotations/10.1.5": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime": "4.0.0"
+        },
+        "compile": {
+          "lib/dotnet/JetBrains.Annotations.Dotnet.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/JetBrains.Annotations.Dotnet.dll": {}
+        }
+      },
       "Libuv/1.9.0": {
         "type": "package",
         "dependencies": {
@@ -4037,6 +4049,22 @@
     }
   },
   "libraries": {
+    "JetBrains.Annotations/10.1.5": {
+      "sha512": "LRyTrsiTWsV4C4cUMfdEkAdd8S0BREvj3hXZ1gGr3GZGFf0q2KW3IFGMPOguAxOrWH44Nw12jqr37B1Jph2E6A==",
+      "type": "package",
+      "path": "JetBrains.Annotations/10.1.5",
+      "files": [
+        "JetBrains.Annotations.10.1.5.nupkg.sha512",
+        "JetBrains.Annotations.nuspec",
+        "lib/dotnet/JetBrains.Annotations.Dotnet.dll",
+        "lib/net/JetBrains.Annotations.dll",
+        "lib/net/JetBrains.Annotations.xml",
+        "lib/portable-net4+sl4+wp7+netcore45/JetBrains.Annotations.PCL1.dll",
+        "lib/portable-net4+sl4+wp7+netcore45/JetBrains.Annotations.PCL1.xml",
+        "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.PCL328.dll",
+        "lib/portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1/JetBrains.Annotations.PCL328.xml"
+      ]
+    },
     "Libuv/1.9.0": {
       "sha512": "9Q7AaqtQhS8JDSIvRBt6ODSLWDBI4c8YxNxyCQemWebBFUtBbc6M5Vi5Gz1ZyIUlTW3rZK9bIr5gnVyv0z7a2Q==",
       "type": "package",
@@ -10305,6 +10333,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "JetBrains.Annotations >= 10.1.5",
       "Microsoft.ApplicationInsights.AspNetCore >= 1.0.0",
       "Microsoft.AspNetCore.Diagnostics >= 1.0.0",
       "Microsoft.AspNetCore.Mvc >= 1.0.0",

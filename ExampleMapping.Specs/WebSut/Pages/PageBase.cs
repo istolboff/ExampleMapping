@@ -1,25 +1,24 @@
-﻿using System.Diagnostics.Contracts;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
+﻿using System;
+using WatiN.Core;
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
     internal abstract class PageBase
     {
-        protected PageBase(IWebDriver webDriver, string pageUrl)
+        protected PageBase(Browser browser, string pageUrl)
         {
-            Contract.Requires(webDriver != null);
-
-            WebDriver = webDriver;
-            webDriver.Navigate().GoToUrl(pageUrl);
-            PageFactory.InitElements(webDriver, this);
+            Browser = browser;
+            _pageUrl = pageUrl;
+            browser.GoTo(pageUrl);
         }
 
-        protected IWebDriver WebDriver { get; }
-
-        public void Submit()
+        public override string ToString()
         {
-            throw new System.NotImplementedException();
+            return $"URL: {_pageUrl}{Environment.NewLine}Body:{Browser.Html}";
         }
+
+        protected Browser Browser { get; }
+
+        private readonly string _pageUrl;
     }
 }

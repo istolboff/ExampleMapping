@@ -2,14 +2,12 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace ExampleMapping.Specs.Miscellaneous
+namespace ExampleMapping.Specs.WebSut
 {
     internal static class IisExpress
     {
         public static void RunWebProjectUnderTest(int port)
         {
-            var programFiles = Environment.GetEnvironmentVariable(Environment.Is64BitOperatingSystem ? "ProgramFiles(x86)" : "ProgramFiles");
-
             var startInfo = new ProcessStartInfo
                             {
                                 WindowStyle = ProcessWindowStyle.Normal,
@@ -17,20 +15,20 @@ namespace ExampleMapping.Specs.Miscellaneous
                                 LoadUserProfile = true,
                                 CreateNoWindow = false,
                                 UseShellExecute = false,
-                                Arguments = $"/path:\"{WebProjectUnderTestPath}\" /port:{port} /systray:false",
+                                Arguments = $"/path:\"{WebProjectPathes.RootPath}\" /port:{port} /systray:false",
                                 FileName = FullIisExpressExePath
             };
             
             startInfo.EnvironmentVariables.Add("LAUNCHER_PATH", "dotnet");
-            startInfo.EnvironmentVariables.Add("LAUNCHER_ARGS", SiteUnderTestDllPath);
+            startInfo.EnvironmentVariables.Add("LAUNCHER_ARGS", WebProjectPathes.SiteDllPath);
 
-            Trace.WriteLine($"Starting IIS Express: \"{startInfo.FileName}\" {startInfo.Arguments}  // %LAUNCHER_PATH%=dotnet; %LAUNCHER_ARGS%=\"{SiteUnderTestDllPath}\"");
-            IisExpressProcess = Process.Start(startInfo);
+            Trace.WriteLine($"Starting IIS Express: \"{startInfo.FileName}\" {startInfo.Arguments}  // %LAUNCHER_PATH%=dotnet; %LAUNCHER_ARGS%=\"{WebProjectPathes.SiteDllPath}\"");
+            _iisExpressProcess = Process.Start(startInfo);
         }
 
         public static void Stop()
         {
-            IisExpressProcess.Kill();
+            _iisExpressProcess.Kill();
         }
 
         private static string FullIisExpressExePath
@@ -42,32 +40,6 @@ namespace ExampleMapping.Specs.Miscellaneous
             }
         }
 
-        private static string WebProjectUnderTestPath
-        {
-            get
-            {
-                return Path.GetFullPath(Path.Combine(ThisAssemblyFolderPath, @"..\..\" + WebProjectName));
-            }
-        }
-
-        private static string SiteUnderTestDllPath
-        {
-            get
-            {
-                return Path.GetFullPath(Path.Combine(ThisAssemblyFolderPath, $"..\\{WebProjectName}\\bin\\{ConfigurationName}\\netcoreapp1.0\\{WebProjectName}.dll"));
-            }
-        }
-
-        private const string WebProjectName = "ExampleMapping.Web";
-
-        private static readonly string ThisAssemblyFolderPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-#if DEBUG
-        private const string ConfigurationName = "Debug";
-#else
-        private const string ConfigurationName = "Release";
-#endif
-
-        private static Process IisExpressProcess;
+        private static Process _iisExpressProcess;
     }
 }

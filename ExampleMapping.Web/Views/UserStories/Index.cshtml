@@ -19,12 +19,8 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserStoryId">Edit</a>
-            </td>
+            <td><div id="StoryName">@Html.DisplayFor(_ => item.Name)</div></td>
+            <td><a asp-action="Edit" asp-route-id="@item.UserStoryId">Edit</a></td>
         </tr>
     }
 </table>

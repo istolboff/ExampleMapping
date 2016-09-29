@@ -1,25 +1,23 @@
-﻿using ExampleMapping.Specs.Miscellaneous;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
+﻿using WatiN.Core;
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
-    internal sealed class CreateUserStoryPage : PageBase
+    internal sealed class CreateUserStoryPage : SubmittablePage
     {
-        public CreateUserStoryPage(IWebDriver webDriver, string webProjectUrl)
-            : base(webDriver, webProjectUrl + "/Create")
+        public CreateUserStoryPage(Browser browser, string webProjectUrl)
+            : base(browser, webProjectUrl + "/Create")
         {
+            _userStoryName = browser.TextField(Find.ByName("Name"));
         }
 
         public string UserStoryName
         {
             set
             {
-                _userStoryName.SendKeys(value);
+                _userStoryName.TypeText(value);
             }
         }
 
-        [FindsBy(How = How.Id, Using = "Name")]
-        private readonly IWebElement _userStoryName = MakeCompilerHappy.InitialWebElementValue;
+        private readonly TextField _userStoryName;
     }
 }
