@@ -119,6 +119,7 @@
     <Compile Include="WebSut\Pages\ListUserStories.cs" />
     <Compile Include="WebSut\Pages\PageBase.cs" />
     <Compile Include="WebSut\Pages\SubmittablePage.cs" />
+    <Compile Include="WebSut\WebApplicationDataRepository.cs" />
     <Compile Include="WebSut\WebApplicationUnderTest.cs" />
     <Compile Include="WebSut\WebProjectPathes.cs" />
   </ItemGroup>

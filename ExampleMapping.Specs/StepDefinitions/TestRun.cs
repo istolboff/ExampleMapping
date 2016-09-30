@@ -1,4 +1,4 @@
-﻿using System.Data.SQLite;
+﻿using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using TechTalk.SpecFlow;
@@ -22,14 +22,14 @@ namespace ExampleMapping.Specs.StepDefinitions
         [BeforeScenario]
         public static void SetupScenario()
         {
-            using (var sqLiteConnection = new SQLiteConnection($"Data Source={WebProjectPathes.SqliteDatabaseFilePath}"))
+            if (!File.Exists(WebProjectPathes.SqliteDatabaseFilePath))
             {
-                sqLiteConnection.Open();
-                using (var sqLiteCommand = sqLiteConnection.CreateCommand())
-                {
-                    sqLiteCommand.CommandText = "delete from UserStories";
-                    sqLiteCommand.ExecuteNonQuery();
-                }
+                return;
+            }
+
+            using (var applicationDataRepository = new WebApplicationDataRepository(WebProjectPathes.SqliteDatabaseFilePath))
+            {
+                applicationDataRepository.ClearEverything();
             }
         }
 
