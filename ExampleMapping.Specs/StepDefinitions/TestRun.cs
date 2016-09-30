@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Data.SQLite;
+using System.Net;
 using System.Net.Sockets;
 using TechTalk.SpecFlow;
 using ExampleMapping.Specs.WebSut;
@@ -21,6 +22,15 @@ namespace ExampleMapping.Specs.StepDefinitions
         [BeforeScenario]
         public static void SetupScenario()
         {
+            using (var sqLiteConnection = new SQLiteConnection($"Data Source={WebProjectPathes.SqliteDatabaseFilePath}"))
+            {
+                sqLiteConnection.Open();
+                using (var sqLiteCommand = sqLiteConnection.CreateCommand())
+                {
+                    sqLiteCommand.CommandText = "delete from UserStories";
+                    sqLiteCommand.ExecuteNonQuery();
+                }
+            }
         }
 
         [AfterScenario]
