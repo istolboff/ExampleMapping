@@ -111,6 +111,39 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Adding several user stories")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "User Stories Manipulation")]
+        public virtual void AddingSeveralUserStories()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding several user stories", ((string[])(null)));
+#line 17
+this.ScenarioSetup(scenarioInfo);
+#line 18
+    testRunner.Given("I have created a User Story with the name \'First story\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 19
+ testRunner.And("I have created a User Story with the name \'Another story\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 20
+ testRunner.And("I have created a User Story with the name \'Yet another story\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 21
+ testRunner.And("I have created a User Story with the name \'Last story\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "User Story Name"});
+            table3.AddRow(new string[] {
+                        "First story"});
+            table3.AddRow(new string[] {
+                        "Another story"});
+            table3.AddRow(new string[] {
+                        "Yet another story"});
+            table3.AddRow(new string[] {
+                        "Last story"});
+#line 22
+ testRunner.Then("the list of all stories should contain only the following items", ((string)(null)), table3, "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

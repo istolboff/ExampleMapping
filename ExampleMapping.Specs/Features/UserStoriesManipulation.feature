@@ -13,3 +13,15 @@ Scenario: Edited user story should change its name in the list of all stories
 	Then the list of all stories should contain only the following items
 	  | User Story Name      |
 	  | The name has changed |
+
+Scenario: Adding several user stories
+    Given I have created a User Story with the name 'First story'
+	And I have created a User Story with the name 'Another story'
+	And I have created a User Story with the name 'Yet another story'
+	And I have created a User Story with the name 'Last story'
+	Then the list of all stories should contain only the following items
+	  | User Story Name   |
+	  | First story       |
+	  | Another story     |
+	  | Yet another story |
+	  | Last story        |
