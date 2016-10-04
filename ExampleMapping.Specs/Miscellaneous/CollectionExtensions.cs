@@ -12,5 +12,12 @@ namespace ExampleMapping.Specs.Miscellaneous
 
             return (@this as IReadOnlyCollection<T>) ?? @this.ToList();
         }
+
+        public static VerboseIndexer<TKey, TValue> WithVerboseIndexing<TKey, TValue>(this IDictionary<TKey, TValue> @this, string dictionaryName)
+        {
+            Contract.Requires(@this != null);
+
+            return new VerboseIndexer<TKey, TValue>(dictionaryName, @this);
+        }
     }
 }

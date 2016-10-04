@@ -12,6 +12,13 @@ namespace ExampleMapping.Specs.WebSut.Pages
             Contract.Assume(_submitButton != null);
         }
 
+        protected SubmittablePage(Browser browser, Link link)
+            : base(browser, link)
+        {
+            _submitButton = browser.Button(Find.ById("Submit"));
+            Contract.Assume(_submitButton != null);
+        }
+
         public void Submit()
         {
             _submitButton.Click();

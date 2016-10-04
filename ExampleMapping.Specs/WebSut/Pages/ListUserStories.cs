@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ExampleMapping.Specs.Miscellaneous;
 using WatiN.Core;
 
@@ -12,15 +11,15 @@ namespace ExampleMapping.Specs.WebSut.Pages
         {
         }
 
-        public IReadOnlyCollection<string> UserStoryNames
+        public VerboseIndexer<string, UserStoryPageElement> UserStories
         {
             get
             {
                 return
                     Browser.ElementsOfType<Div>()
                         .Where(element => element.Id == "StoryName")
-                        .Select(element => element.Text)
-                        .AsImmutable();
+                        .ToDictionary(element => element.Text, element => new UserStoryPageElement(element.Text, (Link)element.Elements.Single(), Browser))
+                        .WithVerboseIndexing("User Stories");
             }
         }
     }

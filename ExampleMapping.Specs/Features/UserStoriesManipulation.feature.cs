@@ -76,15 +76,38 @@ namespace ExampleMapping.Specs.Features
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line 4
- testRunner.Given("I have created a User Story with the name \'To be or not to be -- that is the ques" +
-                    "tion!\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I have created a User Story with the name \'Keep it simple!\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                         "User Story Name"});
             table1.AddRow(new string[] {
-                        "To be or not to be -- that is the question!"});
+                        "Keep it simple!"});
 #line 5
  testRunner.Then("the list of all stories should contain only the following items", ((string)(null)), table1, "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Edited user story should change its name in the list of all stories")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "User Stories Manipulation")]
+        public virtual void EditedUserStoryShouldChangeItsNameInTheListOfAllStories()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Edited user story should change its name in the list of all stories", ((string[])(null)));
+#line 10
+this.ScenarioSetup(scenarioInfo);
+#line 11
+ testRunner.Given("I have created a User Story with the name \'My name will be changed\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 12
+ testRunner.And("I changed the name of the story from \'My name will be changed\' to \'The name has c" +
+                    "hanged\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "User Story Name"});
+            table2.AddRow(new string[] {
+                        "The name has changed"});
+#line 13
+ testRunner.Then("the list of all stories should contain only the following items", ((string)(null)), table2, "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

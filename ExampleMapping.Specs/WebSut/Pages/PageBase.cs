@@ -12,6 +12,13 @@ namespace ExampleMapping.Specs.WebSut.Pages
             browser.GoTo(pageUrl);
         }
 
+        protected PageBase(Browser browser, Link link)
+        {
+            Browser = browser;
+            _pageUrl = link.Url;
+            link.Click();
+        }
+
         public override string ToString()
         {
             return $"URL: {_pageUrl}{Environment.NewLine}Body:{Browser.Html}";

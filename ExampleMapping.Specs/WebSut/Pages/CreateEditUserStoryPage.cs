@@ -2,10 +2,16 @@
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
-    internal sealed class CreateUserStoryPage : SubmittablePage
+    internal sealed class CreateEditUserStoryPage : SubmittablePage
     {
-        public CreateUserStoryPage(Browser browser, string webProjectUrl)
+        public CreateEditUserStoryPage(Browser browser, string webProjectUrl)
             : base(browser, webProjectUrl + "/Create")
+        {
+            _userStoryName = browser.TextField(Find.ByName("Name"));
+        }
+
+        public CreateEditUserStoryPage(Browser browser, Link link) 
+            : base(browser, link)
         {
             _userStoryName = browser.TextField(Find.ByName("Name"));
         }

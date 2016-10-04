@@ -13,14 +13,12 @@
 <table class="table">
     <tr>
         <th>Name</th>
-        <th>Edit</th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-            <td><div id="StoryName">@Html.DisplayFor(_ => item.Name)</div></td>
-            <td><a asp-action="Edit" asp-route-id="@item.UserStoryId">Edit</a></td>
+            <td><div id="StoryName"><a asp-controller="UserStories" asp-action="Edit" asp-route-id="@item.UserStoryId">@item.Name</a></div></td>
         </tr>
     }
 </table>

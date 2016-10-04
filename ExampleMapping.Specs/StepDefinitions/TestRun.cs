@@ -33,8 +33,8 @@ namespace ExampleMapping.Specs.StepDefinitions
             }
         }
 
-        [AfterScenario]
-        public static void TeardownScenario()
+        [AfterTestRun]
+        public static void TeardownTestRun()
         {
             ApplicationUnderTest.Dispose();
             IisExpress.Stop();
