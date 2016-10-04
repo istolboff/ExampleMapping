@@ -5,27 +5,19 @@ namespace ExampleMapping.Specs.WebSut.Pages
 {
     internal abstract class PageBase
     {
-        protected PageBase(Browser browser, string pageUrl)
+        protected PageBase(NavigableUrl url)
         {
-            Browser = browser;
-            _pageUrl = pageUrl;
-            browser.GoTo(pageUrl);
-        }
-
-        protected PageBase(Browser browser, Link link)
-        {
-            Browser = browser;
-            _pageUrl = link.Url;
-            link.Click();
+            Url = url;
+            url.Navigate();
         }
 
         public override string ToString()
         {
-            return $"URL: {_pageUrl}{Environment.NewLine}Body:{Browser.Html}";
+            return $"URL: {Url}{Environment.NewLine}Body:{Browser.Html}";
         }
 
-        protected Browser Browser { get; }
+        protected NavigableUrl Url { get; }
 
-        private readonly string _pageUrl;
+        protected Browser Browser => Url.Browser;
     }
 }

@@ -5,17 +5,10 @@ namespace ExampleMapping.Specs.WebSut.Pages
 {
     internal abstract class SubmittablePage : PageBase
     {
-        protected SubmittablePage(Browser browser, string pageUrl)
-            : base(browser, pageUrl)
+        protected SubmittablePage(NavigableUrl url)
+            : base(url)
         {
-            _submitButton = browser.Button(Find.ById("Submit"));
-            Contract.Assume(_submitButton != null);
-        }
-
-        protected SubmittablePage(Browser browser, Link link)
-            : base(browser, link)
-        {
-            _submitButton = browser.Button(Find.ById("Submit"));
+            _submitButton = url.Browser.Button(Find.ById("Submit"));
             Contract.Assume(_submitButton != null);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+using ExampleMapping.Specs.WebSut.Pages;
 using WatiN.Core;
 
 namespace ExampleMapping.Specs.WebSut
@@ -13,14 +14,14 @@ namespace ExampleMapping.Specs.WebSut
 
             _browser = browser;
             PortNumber = portNumber;
-            _webProjectUrl = $"http://localhost:{portNumber}/UserStories";
+            _webProjectUrl = new Uri($"http://localhost:{portNumber}/UserStories");
         }
 
         public int PortNumber { get; }
 
         public TPage NavigateTo<TPage>() where TPage : class 
         {
-            return Activator.CreateInstance(typeof(TPage), _browser, _webProjectUrl) as TPage;
+            return Activator.CreateInstance(typeof(TPage), new NavigableUrl(_browser, _webProjectUrl)) as TPage;
         }
 
         public void Dispose()
@@ -30,6 +31,6 @@ namespace ExampleMapping.Specs.WebSut
         }
 
         private readonly Browser _browser;
-        private readonly string _webProjectUrl;
+        private readonly Uri _webProjectUrl;
     }
 }

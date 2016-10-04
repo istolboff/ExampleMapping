@@ -13,7 +13,7 @@ namespace ExampleMapping.Specs.StepDefinitions
         [Given(@"I have created a User Story with the name '(.*)'")]
         public static void GivenIHaveCreatedAUserStoryWithTheName(string storyName)
         {
-            var page = TestRun.ApplicationUnderTest.NavigateTo<CreateEditUserStoryPage>();
+            var page = TestRun.ApplicationUnderTest.NavigateTo<CreateUserStoryPage>();
             page.UserStoryName = storyName;
             page.Submit();
         }

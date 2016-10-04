@@ -4,21 +4,19 @@ namespace ExampleMapping.Specs.WebSut.Pages
 {
     internal sealed class UserStoryPageElement
     {
-        public UserStoryPageElement(string userStoryName, Link editUserStoryLink, Browser browser)
+        public UserStoryPageElement(string userStoryName, NavigableUrl editUserStoryUrl)
         {
             UserStoryName = userStoryName;
-            _editUserStoryLink = editUserStoryLink;
-            _browser = browser;
+            _editUserStoryUrl = editUserStoryUrl;
         }
 
         public string UserStoryName { get; }
 
-        public CreateEditUserStoryPage Edit()
+        public EditUserStoryPage Edit()
         {
-            return new CreateEditUserStoryPage(_browser, _editUserStoryLink);
+            return new EditUserStoryPage(_editUserStoryUrl);
         }
 
-        private readonly Link _editUserStoryLink;
-        private readonly Browser _browser;
+        private readonly NavigableUrl _editUserStoryUrl;
     }
 }

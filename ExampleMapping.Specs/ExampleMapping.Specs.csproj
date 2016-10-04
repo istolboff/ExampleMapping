@@ -116,10 +116,13 @@
     <Compile Include="WebSut\IisExpress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StepDefinitions\UserStorySteps.cs" />
-    <Compile Include="WebSut\Pages\CreateEditUserStoryPage.cs" />
+    <Compile Include="WebSut\Pages\CreateUserStoryPage.cs" />
+    <Compile Include="WebSut\Pages\EditUserStoryPage.cs" />
     <Compile Include="WebSut\Pages\ListUserStories.cs" />
+    <Compile Include="WebSut\Pages\NavigableUrl.cs" />
     <Compile Include="WebSut\Pages\PageBase.cs" />
     <Compile Include="WebSut\Pages\SubmittablePage.cs" />
+    <Compile Include="WebSut\Pages\UserStoryPageBase.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageElement.cs" />
     <Compile Include="WebSut\WebApplicationDataRepository.cs" />
     <Compile Include="WebSut\WebApplicationUnderTest.cs" />
