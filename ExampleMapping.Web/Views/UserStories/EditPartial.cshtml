@@ -2,7 +2,7 @@
 @model ExampleMapping.Web.Models.UserStory
 
 @{ 
-    var viewType = (ViewType)Enum.Parse(typeof(ViewType), (@ViewData["ViewType"] ?? string.Empty).ToString());
+    var viewType = (ViewType)Enum.Parse(typeof(ViewType), (ViewData["ViewType"] ?? string.Empty).ToString());
     var pageTitle = viewType == ViewType.CreateNew ? "New User Story" : "Edit User Story";
     var editButtonContent = viewType == ViewType.CreateNew ? "Create" : "Save";
     var aspAction = viewType == ViewType.CreateNew ? "Create" : "Edit";

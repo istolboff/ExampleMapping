@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.IO;
 
 namespace ExampleMapping.Specs.WebSut
@@ -36,6 +37,7 @@ namespace ExampleMapping.Specs.WebSut
             get
             {
                 var programFilesPath = Environment.GetEnvironmentVariable(Environment.Is64BitOperatingSystem ? "ProgramFiles(x86)" : "ProgramFiles");
+                Contract.Assume(!string.IsNullOrEmpty(programFilesPath));
                 return string.Format(Path.Combine(programFilesPath, "IIS Express\\IisExpress.exe"));
             }
         }

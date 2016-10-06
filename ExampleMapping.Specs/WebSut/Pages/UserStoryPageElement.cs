@@ -1,6 +1,4 @@
-﻿using WatiN.Core;
-
-namespace ExampleMapping.Specs.WebSut.Pages
+﻿namespace ExampleMapping.Specs.WebSut.Pages
 {
     internal sealed class UserStoryPageElement
     {

@@ -1,1 +1,2 @@
-﻿@Html.Partial("EditPartial", new ViewDataDictionary(ViewData) { { "ViewType", ExampleMapping.Web.Views.ViewType.EditExisting } })
+﻿@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@Html.Partial("EditPartial", new ViewDataDictionary(ViewData) { { "ViewType", ExampleMapping.Web.Views.ViewType.EditExisting } })

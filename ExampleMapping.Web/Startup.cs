@@ -87,6 +87,6 @@ namespace ExampleMapping.Web
             return result;
         }
 
-        private FileInfo _sqliteDatabaseFile;
+        private readonly FileInfo _sqliteDatabaseFile;
     }
 }
