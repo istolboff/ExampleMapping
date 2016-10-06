@@ -16,6 +16,8 @@
 !*CommonReferences/*.dll
 # SpecFlow generated files
 *.feature.cs
+# Include .Targets files  if they’re in the NuGet packages directory
+!/packages/*/*.Targets
 ####################
 # VS Upgrade stuff #
 ####################
