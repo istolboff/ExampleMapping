@@ -37,7 +37,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
             return _url != null ? _url.ToString() : _link.Url;
         }
 
-        public static NavigableUrl operator + (NavigableUrl url, string urlSuffix)
+        public static NavigableUrl operator +(NavigableUrl url, string urlSuffix)
         {
             Contract.Assume(url._url != null);
             return new NavigableUrl(url.Browser, new Uri(url._url, url._url.AbsolutePath + urlSuffix));

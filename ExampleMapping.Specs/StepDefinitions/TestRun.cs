@@ -10,7 +10,7 @@ namespace ExampleMapping.Specs.StepDefinitions
     [Binding]
     public static class TestRun
     {
-        public static WebApplicationUnderTest ApplicationUnderTest;
+        public static WebApplicationUnderTest ApplicationUnderTest { get; private set; }
 
         [BeforeTestRun]
         public static void SetupTestRun()
