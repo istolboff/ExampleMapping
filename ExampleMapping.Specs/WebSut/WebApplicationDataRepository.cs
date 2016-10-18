@@ -17,11 +17,24 @@ namespace ExampleMapping.Specs.WebSut
 
         public void ClearEverything()
         {
+            foreach (var tableName in new[] { "UserStories", "Rules" })
+            {
+                ClearTable(tableName);
+            }
+        }
+
+        private void ClearTable(string tableName)
+        {
             using (var sqLiteCommand = _sqLiteConnection.CreateCommand())
             {
-                sqLiteCommand.CommandText = "delete from UserStories";
+                sqLiteCommand.CommandText = $"delete from {tableName}";
                 sqLiteCommand.ExecuteNonQuery();
             }
+        }
+
+        public static void EraseFromDisk()
+        {
+            File.Delete(WebProjectPathes.SqliteDatabaseFilePath);
         }
 
         public void Dispose()

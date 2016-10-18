@@ -9,16 +9,20 @@ namespace ExampleMapping.Web.Models
         {
         }
 
-        public ExampleMappingContext(DbContextOptions<ExampleMappingContext> dbContextOptions)
+        public ExampleMappingContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions)
         {
         }
 
         public DbSet<UserStory> UserStories { get; set; }
 
+        public DbSet<Rule> Rules { get; set; }
+
         public Task<UserStory> FindUserStoryById(ulong userStoryId)
         {
-            return UserStories.SingleOrDefaultAsync(userStory => userStory.UserStoryId == userStoryId);
+            return UserStories
+                        .Include(userStory => userStory.Rules)
+                        .SingleOrDefaultAsync(userStory => userStory.UserStoryId == userStoryId);
         }
     }
 }

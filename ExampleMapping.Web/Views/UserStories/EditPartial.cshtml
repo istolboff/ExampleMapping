@@ -1,4 +1,6 @@
-﻿@using ExampleMapping.Web.Views
+﻿@using System.Threading.Tasks
+@using ExampleMapping.Web.Models
+@using ExampleMapping.Web.Views
 @model ExampleMapping.Web.Models.UserStory
 
 @{ 
@@ -15,11 +17,21 @@
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
+            <div class="col-md-10" id="UserStoryContent">
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+                @{
+                    var ruleIndex = 0;
+                    foreach (var rule in Model?.Rules ?? Enumerable.Empty<Rule>())
+                    {
+                        var ruleName = $"Rules[{ruleIndex}].Name";
+                            <input name="@ruleName" value="@rule.Name" />
+                            ++ruleIndex;
+                        }
+                }
             </div>
         </div>
+        <div><a id="AddNewRule" href="javascript:AddBlankRuleToUserStory()">Rule Blanks</a></div>
         @if (viewType == ViewType.EditExisting)
         {
             <input type="hidden" asp-for="UserStoryId" />

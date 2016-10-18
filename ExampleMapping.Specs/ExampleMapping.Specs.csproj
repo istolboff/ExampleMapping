@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExampleMapping.Specs</RootNamespace>
     <AssemblyName>ExampleMapping.Specs</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseIntermediateOutputPath>obj\$(Configuration)\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)\$(AssemblyName)\</IntermediateOutputPath>
@@ -22,6 +22,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -96,15 +97,27 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\ExampleMapping.Web\Models\Rule.cs">
+      <Link>WebSut\Model\Rule.cs</Link>
+    </Compile>
+    <Compile Include="..\ExampleMapping.Web\Models\UserStory.cs">
+      <Link>WebSut\Model\UserStory.cs</Link>
+    </Compile>
     <Compile Include="Features\UserStoriesManipulation.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UserStoriesManipulation.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\UserStoryCornerCases.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserStoryCornerCases.feature</DependentUpon>
+    </Compile>
     <Compile Include="Miscellaneous\CollectionExtensions.cs" />
     <Compile Include="Miscellaneous\GenericTypeExtensions.cs" />
     <Compile Include="Miscellaneous\VerboseIndexer.cs" />
     <Compile Include="Miscellaneous\Verify.cs" />
+    <Compile Include="Miscellaneous\Wait.cs" />
     <Compile Include="SpecFlow\MismatchedColumn.cs" />
     <Compile Include="SpecFlow\MismatchedRow.cs" />
     <Compile Include="SpecFlow\MissingRow.cs" />
@@ -116,6 +129,7 @@
     <Compile Include="WebSut\IisExpress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StepDefinitions\UserStorySteps.cs" />
+    <Compile Include="WebSut\NewlyCreatedElementFinder.cs" />
     <Compile Include="WebSut\Pages\CreateUserStoryPage.cs" />
     <Compile Include="WebSut\Pages\EditUserStoryPage.cs" />
     <Compile Include="WebSut\Pages\ListUserStories.cs" />
@@ -124,6 +138,7 @@
     <Compile Include="WebSut\Pages\SubmittablePage.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageBase.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageElement.cs" />
+    <Compile Include="WebSut\WatinExtensions\ElementContainerExtensions.cs" />
     <Compile Include="WebSut\WebApplicationDataRepository.cs" />
     <Compile Include="WebSut\WebApplicationUnderTest.cs" />
     <Compile Include="WebSut\WebProjectPathes.cs" />
@@ -133,6 +148,10 @@
     <None Include="Features\UserStoriesManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>UserStoriesManipulation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\UserStoryCornerCases.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>UserStoryCornerCases.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>

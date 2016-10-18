@@ -22,6 +22,7 @@ namespace ExampleMapping.Specs.WebSut
             
             startInfo.EnvironmentVariables.Add("LAUNCHER_PATH", "dotnet");
             startInfo.EnvironmentVariables.Add("LAUNCHER_ARGS", WebProjectPathes.SiteDllPath);
+            startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
 
             Trace.WriteLine($"Starting IIS Express: \"{startInfo.FileName}\" {startInfo.Arguments}  // %LAUNCHER_PATH%=dotnet; %LAUNCHER_ARGS%=\"{WebProjectPathes.SiteDllPath}\"");
             _iisExpressProcess = Process.Start(startInfo);

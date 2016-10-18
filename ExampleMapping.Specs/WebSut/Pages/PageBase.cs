@@ -7,7 +7,8 @@ namespace ExampleMapping.Specs.WebSut.Pages
     {
         protected PageBase(NavigableUrl url)
         {
-            Url = url;
+            Url = url.Uri;
+            Browser = url.Browser;
             url.Navigate();
         }
 
@@ -16,8 +17,8 @@ namespace ExampleMapping.Specs.WebSut.Pages
             return $"URL: {Url}{Environment.NewLine}Body:{Browser.Html}";
         }
 
-        protected NavigableUrl Url { get; }
+        protected Uri Url { get; }
 
-        protected Browser Browser => Url.Browser;
+        protected Browser Browser { get; }
     }
 }

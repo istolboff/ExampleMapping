@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics.Contracts;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using TechTalk.SpecFlow;
@@ -15,6 +17,8 @@ namespace ExampleMapping.Specs.StepDefinitions
         [BeforeTestRun]
         public static void SetupTestRun()
         {
+            MakeCodeContractsToReportFailureViaExceptionsRatherThanViaMessageBoxes();
+            WebApplicationDataRepository.EraseFromDisk();
             ApplicationUnderTest = new WebApplicationUnderTest(new IE(true), GetFreePort());
             IisExpress.RunWebProjectUnderTest(ApplicationUnderTest.PortNumber);
         }
@@ -38,6 +42,18 @@ namespace ExampleMapping.Specs.StepDefinitions
         {
             ApplicationUnderTest.Dispose();
             IisExpress.Stop();
+        }
+
+        private static void MakeCodeContractsToReportFailureViaExceptionsRatherThanViaMessageBoxes()
+        {
+            Contract.ContractFailed += (_, contractFailedEventArgs) =>
+            {
+                contractFailedEventArgs.SetHandled();
+
+                throw new InvalidOperationException(
+                    $"Failed Code Contracts condition: {contractFailedEventArgs.Condition}. {contractFailedEventArgs.Message}",
+                    contractFailedEventArgs.OriginalException);
+            };
         }
 
         private static int GetFreePort()

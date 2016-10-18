@@ -8,17 +8,27 @@ namespace ExampleMapping.Specs.WebSut.Pages
     {
         public NavigableUrl(Browser browser, Uri url)
         {
+            Contract.Requires(browser != null);
+            Contract.Requires(url != null);
+
             Browser = browser;
+            Uri = url;
             _url = url;
         }
 
         public NavigableUrl(Browser browser, Link link)
         {
+            Contract.Requires(browser != null);
+            Contract.Requires(link != null);
+
             Browser = browser;
+            Uri = new Uri(link.Url);
             _link = link;
         }
 
         public Browser Browser { get; }
+
+        public Uri Uri { get; }
 
         public void Navigate()
         {
@@ -34,7 +44,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
         public override string ToString()
         {
-            return _url != null ? _url.ToString() : _link.Url;
+            return Uri.ToString();
         }
 
         public static NavigableUrl operator +(NavigableUrl url, string urlSuffix)

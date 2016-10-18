@@ -57,7 +57,7 @@ namespace ExampleMapping.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ulong userStoryId, /*[Bind("UserStoryId, Name")]*/ UserStory userStory)
+        public async Task<IActionResult> Edit(ulong userStoryId, UserStory userStory)
         {
             if (userStoryId != userStory.UserStoryId)
             {
