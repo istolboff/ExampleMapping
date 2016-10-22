@@ -1,4 +1,5 @@
-﻿@using System.Threading.Tasks
+﻿@using System.Linq
+@using System.Threading.Tasks
 @using ExampleMapping.Web.Models
 @using ExampleMapping.Web.Views
 @model ExampleMapping.Web.Models.UserStory
@@ -21,17 +22,26 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
                 @{
-                    var ruleIndex = 0;
-                    foreach (var rule in Model?.Rules ?? Enumerable.Empty<Rule>())
+                    foreach (var ruleElementsGroup in (Model?.Rules ?? Enumerable.Empty<Rule>()).Select((rule, index) =>
+                        new
+                        {
+                            GroupName = $"RuleElementsGroup_{rule.RuleId}",
+                            IdInputName = $"Rules[{index}].RuleId",
+                            TextInputName = $"Rules[{index}].Name",
+                            DeleteButtonName = $"DeleteRule_{index}",
+                            Rule = rule
+                        }))
                     {
-                        var ruleName = $"Rules[{ruleIndex}].Name";
-                            <input name="@ruleName" value="@rule.Name" />
-                            ++ruleIndex;
-                        }
+                        <div id="@ruleElementsGroup.GroupName">
+                            <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.RuleId" />
+                            <input type="text" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
+                            <input type="button" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="AllRulesCollection.MarkRuleAsDeleted('@ruleElementsGroup.GroupName')" />
+                        </div>
+                    }
                 }
             </div>
         </div>
-        <div><a id="AddNewRule" href="javascript:AddBlankRuleToUserStory()">Rule Blanks</a></div>
+        <div><a id="AddNewRule" href="javascript:AllRulesCollection.AddBlankRule()">Rule Blanks</a></div>
         @if (viewType == ViewType.EditExisting)
         {
             <input type="hidden" asp-for="UserStoryId" />

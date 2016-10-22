@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using ExampleMapping.Web.Miscellaneous;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ExampleMapping.Web.Models;
@@ -25,7 +27,7 @@ namespace ExampleMapping.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit(ulong? id)
+        public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {
@@ -57,36 +59,37 @@ namespace ExampleMapping.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ulong userStoryId, UserStory userStory)
+        public async Task<IActionResult> Edit(long userStoryId, UserStory userStory)
         {
             if (userStoryId != userStory.UserStoryId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _exampleMappingContext.Update(userStory);
-                    await _exampleMappingContext.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (await _exampleMappingContext.FindUserStoryById(userStoryId) == null)
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                return RedirectToAction("Index");
+                return View(userStory);
             }
 
-            return View(userStory);
+            try
+            {
+                var ruleIdsToDelete = userStory.Rules.Select(rule => rule.RuleId).Where(ruleId => ruleId < 0).Select(ruleId => -ruleId).ToArray();
+                userStory.Rules.RemoveIf(rule => rule.RuleId < 0);
+                _exampleMappingContext.Update(userStory);
+                _exampleMappingContext.Rules.RemoveIf(rule => ruleIdsToDelete.Contains(rule.RuleId));
+                await _exampleMappingContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await _exampleMappingContext.FindUserStoryById(userStoryId) != null)
+                {
+                    throw;
+                }
+
+                return NotFound();
+            }
+
+            return RedirectToAction("Index");
         }
 
         private readonly ExampleMappingContext _exampleMappingContext;

@@ -11,7 +11,7 @@ namespace ExampleMapping.Specs.WebSut.WatinExtensions
         {
             return @this.Elements
                 .OfType<TElement>()
-                .Where(element => elementIdRegex.Match(element.IdOrName).Success);
+                .Where(element => !string.IsNullOrWhiteSpace(element.IdOrName) && elementIdRegex.Match(element.IdOrName).Success);
         }
     }
 }

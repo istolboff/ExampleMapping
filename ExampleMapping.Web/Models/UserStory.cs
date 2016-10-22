@@ -9,7 +9,7 @@ namespace ExampleMapping.Web.Models
             Rules = new List<Rule>();
         }
 
-        public ulong UserStoryId { get; set; }
+        public long UserStoryId { get; set; }
 
         public string Name { get; set; }
 

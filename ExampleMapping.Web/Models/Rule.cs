@@ -2,7 +2,7 @@
 {
     public class Rule
     {
-        public ulong RuleId { get; set; }
+        public long RuleId { get; set; }
 
         public string Name { get; set; }
 

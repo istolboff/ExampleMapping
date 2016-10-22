@@ -18,7 +18,7 @@ namespace ExampleMapping.Web.Models
 
         public DbSet<Rule> Rules { get; set; }
 
-        public Task<UserStory> FindUserStoryById(ulong userStoryId)
+        public Task<UserStory> FindUserStoryById(long userStoryId)
         {
             return UserStories
                         .Include(userStory => userStory.Rules)

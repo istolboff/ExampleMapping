@@ -35,15 +35,38 @@ namespace ExampleMapping.Specs.StepDefinitions
         }
 
         [Given(@"I added a new Rule that says '(.*)'")]
-        public static void AddedANewRuleThatSays(string ruleText)
+        public static void AddedNewRule(string ruleText)
         {
             CurrentUserStoryPage.AddRule(ruleText);
+        }
+
+        [Given(@"the User Story '(.*)' has the following Rules")]
+        public static void UserStoryHasRules(string storyName, Table rulesText)
+        {
+            StartedToCreateUserStory(storyName);
+            foreach (var ruleRow in rulesText.Rows)
+            {
+                AddedNewRule(ruleRow["Rule Text"]);
+            }
+            CompleteEditingTheUserStory();
+        }
+
+        [Given(@"I started to edit the User Story '(.*)'")]
+        public static void StartedToEditUserStory(string storyName)
+        {
+            CurrentUserStoryPage = LoadUserStory(storyName);
         }
 
         [When(@"I complete editing the User Story")]
         public static void CompleteEditingTheUserStory()
         {
             CurrentUserStoryPage.Submit();
+        }
+
+        [When(@"I delete the Rule '(.*)'")]
+        public static void DeleteRule(string ruleText)
+        {
+            CurrentUserStoryPage.DeleteRule(ruleText);
         }
 
         [Then(@"the list of all stories should contain only the following items")]
