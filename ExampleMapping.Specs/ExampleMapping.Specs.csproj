@@ -104,6 +104,11 @@
     <Compile Include="..\ExampleMapping.Web\Models\UserStory.cs">
       <Link>WebSut\Model\UserStory.cs</Link>
     </Compile>
+    <Compile Include="Features\RulesInsideSingleUserStoryManipulation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RulesInsideSingleUserStoryManipulation.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\UserStoriesManipulation.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -146,6 +151,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Features\RulesInsideSingleUserStoryManipulation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RulesInsideSingleUserStoryManipulation.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\UserStoriesManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>UserStoriesManipulation.feature.cs</LastGenOutput>
