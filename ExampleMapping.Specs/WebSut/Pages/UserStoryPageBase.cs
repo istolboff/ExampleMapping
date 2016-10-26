@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
-using System.Text.RegularExpressions;
 using ExampleMapping.Specs.Miscellaneous;
 using WatiN.Core;
-using ExampleMapping.Specs.WebSut.WatinExtensions;
+using WatiN.Core.Constraints;
 using ExampleMapping.Web.Models;
+using ExampleMapping.Specs.WebSut.WatinExtensions;
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
@@ -33,7 +32,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
         public void AddRule(string ruleText)
         {
-            var newlyCreatedElementFinder = new NewlyCreatedElementFinder<TextField>(Browser, RuleTextElementIdRegex);
+            var newlyCreatedElementFinder = new NewlyCreatedElementFinder<TextField>(Browser, RuleTextElementConstraint);
             _addNewRuleLink.Click();
             newlyCreatedElementFinder.Result.TypeText(ruleText);
         }
@@ -59,9 +58,9 @@ namespace ExampleMapping.Specs.WebSut.Pages
             get
             {
                 return
-                    Browser.Elements<TextField>(RuleTextElementIdRegex)
+                    Browser.Elements<TextField>(RuleTextElementConstraint)
                         .Zip(
-                            Browser.Elements<Button>(DeleteRuleButtonIdRegex),
+                            Browser.Elements<Button>(DeleteRuleButtonConstraint),
                             (ruleText, deleteButton) => new RuleElementsGroup(ruleText, deleteButton))
                         .AsImmutable();
             }
@@ -70,8 +69,8 @@ namespace ExampleMapping.Specs.WebSut.Pages
         private readonly TextField _userStoryName;
         private readonly Link _addNewRuleLink;
 
-        private static readonly Regex RuleTextElementIdRegex = new Regex(@"^Rules\[\d+\]\.Name$", RegexOptions.Compiled);
-        private static readonly Regex DeleteRuleButtonIdRegex = new Regex(@"^DeleteRule_\d+$", RegexOptions.Compiled);
+        private static readonly Constraint RuleTextElementConstraint = Find.ByClass("ruleWording");
+        private static readonly Constraint DeleteRuleButtonConstraint = Find.ByClass("deleteRule");
 
         private class RuleElementsGroup
         {

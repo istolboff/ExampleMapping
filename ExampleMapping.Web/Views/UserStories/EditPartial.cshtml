@@ -34,8 +34,8 @@
                     {
                         <div id="@ruleElementsGroup.GroupName">
                             <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.RuleId" />
-                            <input type="text" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
-                            <input type="button" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="AllRulesCollection.MarkRuleAsDeleted('@ruleElementsGroup.GroupName')" />
+                            <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
+                            <input type="button" class="deleteRule" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="AllRulesCollection.MarkRuleAsDeleted('@ruleElementsGroup.GroupName')" />
                         </div>
                     }
                 }

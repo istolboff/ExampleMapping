@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using WatiN.Core;
+using WatiN.Core.Constraints;
 
 namespace ExampleMapping.Specs.WebSut.WatinExtensions
 {
     internal static class ElementContainerExtensions
     {
-        public static IEnumerable<TElement> Elements<TElement>(this IElementContainer @this, Regex elementIdRegex) where TElement : Element
+        public static IEnumerable<TElement> Elements<TElement>(this IElementContainer @this, Constraint elementConstraint) where TElement : Element
         {
-            return @this.Elements
-                .OfType<TElement>()
-                .Where(element => !string.IsNullOrWhiteSpace(element.IdOrName) && elementIdRegex.Match(element.IdOrName).Success);
+            return @this.Elements.Filter(elementConstraint).OfType<TElement>();
         }
     }
 }

@@ -20,12 +20,14 @@ function newRuleCollection() {
 
             var newRuleText = document.createElement("input");
             newRuleText.type = "text";
+            newRuleText.className = "ruleWording";
             newRuleText.name = this.MakeRuleElementName(newRuleIndex, "Name");
             newRuleElementsGroup.appendChild(newRuleText);
 
             var thisClosure = this;
             var newDeleteRuleButton = document.createElement("input");
             newDeleteRuleButton.type = "button";
+            newDeleteRuleButton.className = "deleteRule";
             newDeleteRuleButton.value = "Delete";
             newDeleteRuleButton.onclick = function () { thisClosure.RemoveRuleDomElements(newRuleElementsGroup); };
             newRuleElementsGroup.appendChild(newDeleteRuleButton);
