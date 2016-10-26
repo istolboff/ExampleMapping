@@ -20,7 +20,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
             Browser.WaitForComplete();
             Verify.That(
                 !Browser.Html.Contains("An unhandled exception occurred while processing the request"),
-                () => Browser.Html);
+                () => Browser.Body.Parent.OuterHtml);
         }
 
         private readonly Button _submitButton;

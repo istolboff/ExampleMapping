@@ -3,7 +3,6 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using ExampleMapping.Specs.WebSut.Pages;
 using ExampleMapping.Specs.SpecFlow;
-using ExampleMapping.Web.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExampleMapping.Specs.StepDefinitions
@@ -55,6 +54,12 @@ namespace ExampleMapping.Specs.StepDefinitions
         public static void StartedToEditUserStory(string storyName)
         {
             CurrentUserStoryPage = LoadUserStory(storyName);
+        }
+
+        [Given(@"I illustrated the Rule '(.*)' with the example '(.*)'")]
+        public static void RuleIsIllustratedWithExample(string ruleText, string exampleText)
+        {
+            CurrentUserStoryPage.AddExample(ruleText, exampleText);
         }
 
         [When(@"I complete editing the User Story")]

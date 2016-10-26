@@ -2,7 +2,7 @@
 @using System.Threading.Tasks
 @using ExampleMapping.Web.Models
 @using ExampleMapping.Web.Views
-@model ExampleMapping.Web.Models.UserStory
+@model UserStory
 
 @{ 
     var viewType = (ViewType)Enum.Parse(typeof(ViewType), (ViewData["ViewType"] ?? string.Empty).ToString());
@@ -29,19 +29,23 @@
                             IdInputName = $"Rules[{index}].RuleId",
                             TextInputName = $"Rules[{index}].Name",
                             DeleteButtonName = $"DeleteRule_{index}",
+                            AddExampleLinkName = $"AddExample_{index}",
                             Rule = rule
                         }))
                     {
                         <div id="@ruleElementsGroup.GroupName">
                             <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.RuleId" />
-                            <input type="text" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
-                            <input type="button" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="AllRulesCollection.MarkRuleAsDeleted('@ruleElementsGroup.GroupName')" />
+                            <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" ondrop="DropBlankExample(event)" ondragover="event.preventDefault()" />
+                            <input type="button" class="ruleDeleter" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="AllRulesCollection.MarkRuleAsDeleted('@ruleElementsGroup.GroupName')" />
                         </div>
                     }
                 }
             </div>
         </div>
-        <div><a id="AddNewRule" href="javascript:AllRulesCollection.AddBlankRule()">Rule Blanks</a></div>
+        <div>
+            <a id="AddNewRule" href="javascript:AllRulesCollection.AddBlankRule()">Rule Blanks</a>
+            <a id="AddNewExample" href="#" draggable="true" ondragstart="StartDraggingBlankExample(event)">Add Example</a>
+        </div>
         @if (viewType == ViewType.EditExisting)
         {
             <input type="hidden" asp-for="UserStoryId" />

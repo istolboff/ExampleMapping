@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ExampleMapping.Specs.Miscellaneous;
 using WatiN.Core;
+using ExampleMapping.Specs.Miscellaneous;
 using ExampleMapping.Specs.WebSut.WatinExtensions;
 using ExampleMapping.Web.Models;
 
@@ -16,6 +15,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
         {
             _userStoryName = Browser.TextField(Find.ByName("Name"));
             _addNewRuleLink = Browser.Link(Find.ById("AddNewRule"));
+            _addnewExampleLink = Browser.Link(Find.ById("AddNewExample"));
         }
 
         public string UserStoryName
@@ -33,15 +33,22 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
         public void AddRule(string ruleText)
         {
-            var newlyCreatedElementFinder = new NewlyCreatedElementFinder<TextField>(Browser, RuleTextElementIdRegex);
+            var newRuleFinder = new NewlyCreatedElementFinder<TextField>(Browser, RuleTextElementIdRegex);
             _addNewRuleLink.Click();
-            newlyCreatedElementFinder.Result.TypeText(ruleText);
+            newRuleFinder.Result.TypeText(ruleText);
         }
 
         public void DeleteRule(string ruleText)
         {
-            var ruleElementsGroup = RuleElementsGroups.Single(elementsGroup => elementsGroup.RuleText.Text == ruleText);
-            ruleElementsGroup.DeleteButton.Click();
+            FindRuleElementsGroup(ruleText).DeleteButton.Click();
+        }
+
+        public void AddExample(string ruleText, string exampleText)
+        {
+            var newExampleFinder = new NewlyCreatedElementFinder<TextField>(Browser, ExampleTextElementRegex);
+            var ruleElementsGroup = FindRuleElementsGroup(ruleText);
+            _addnewExampleLink.Drag().DropTo(ruleElementsGroup.RuleText);
+            newExampleFinder.Result.TypeText(exampleText);
         }
 
         public UserStory GetStoryContent()
@@ -67,10 +74,17 @@ namespace ExampleMapping.Specs.WebSut.Pages
             }
         }
 
+        private RuleElementsGroup FindRuleElementsGroup(string ruleText)
+        {
+            return RuleElementsGroups.Single(elementsGroup => elementsGroup.RuleText.Text == ruleText);
+        }
+
         private readonly TextField _userStoryName;
         private readonly Link _addNewRuleLink;
+        private readonly Link _addnewExampleLink;
 
         private static readonly Regex RuleTextElementIdRegex = new Regex(@"^Rules\[\d+\]\.Name$", RegexOptions.Compiled);
+        private static readonly Regex ExampleTextElementRegex = new Regex(@"^Rules\[\d+\]\.Examples\[\d+\]\.Name$", RegexOptions.Compiled);
         private static readonly Regex DeleteRuleButtonIdRegex = new Regex(@"^DeleteRule_\d+$", RegexOptions.Compiled);
 
         private class RuleElementsGroup

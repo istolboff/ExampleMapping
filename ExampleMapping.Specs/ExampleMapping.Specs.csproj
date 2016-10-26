@@ -104,6 +104,11 @@
     <Compile Include="..\ExampleMapping.Web\Models\UserStory.cs">
       <Link>WebSut\Model\UserStory.cs</Link>
     </Compile>
+    <Compile Include="Features\ExamplesInsideSingleRuleManipulation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExamplesInsideSingleRuleManipulation.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\RulesInsideSingleUserStoryManipulation.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -144,13 +149,19 @@
     <Compile Include="WebSut\Pages\SubmittablePage.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageBase.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageElement.cs" />
+    <Compile Include="WebSut\WatinExtensions\DragAndDrop.cs" />
     <Compile Include="WebSut\WatinExtensions\ElementContainerExtensions.cs" />
+    <Compile Include="WebSut\WatinExtensions\ElementExtensions.cs" />
     <Compile Include="WebSut\WebApplicationDataRepository.cs" />
     <Compile Include="WebSut\WebApplicationUnderTest.cs" />
     <Compile Include="WebSut\WebProjectPathes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Features\ExamplesInsideSingleRuleManipulation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ExamplesInsideSingleRuleManipulation.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\RulesInsideSingleUserStoryManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RulesInsideSingleUserStoryManipulation.feature.cs</LastGenOutput>

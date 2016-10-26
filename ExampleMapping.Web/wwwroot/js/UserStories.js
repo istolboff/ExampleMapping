@@ -14,6 +14,7 @@ function newRuleCollection() {
         },
 
         AddBlankRule: function () {
+            var thisClosure = this;
             var newRuleIndex = this.Count();
 
             var newRuleElementsGroup = document.createElement("div");
@@ -23,7 +24,6 @@ function newRuleCollection() {
             newRuleText.name = this.MakeRuleElementName(newRuleIndex, "Name");
             newRuleElementsGroup.appendChild(newRuleText);
 
-            var thisClosure = this;
             var newDeleteRuleButton = document.createElement("input");
             newDeleteRuleButton.type = "button";
             newDeleteRuleButton.value = "Delete";
@@ -75,3 +75,12 @@ function newRuleCollection() {
 }
 
 var AllRulesCollection = newRuleCollection();
+
+function StartDraggingBlankExample(dragEvent) {
+    dragEvent.dataTransfer.setData("text", "");
+}
+
+function DropBlankExample(dropEvent) {
+    dropEvent.preventDefault();
+    alert("Bingo!");
+}
