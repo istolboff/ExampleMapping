@@ -1,4 +1,6 @@
-﻿namespace ExampleMapping.Web.Models
+﻿using System.Collections.Generic;
+
+namespace ExampleMapping.Web.Models
 {
     public class Rule
     {
@@ -7,5 +9,7 @@
         public string Name { get; set; }
 
         public UserStory UserStory { get; set; }
+
+        public ICollection<Example> Examples { get; set; }
     }
 }

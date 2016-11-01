@@ -98,6 +98,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\ExampleMapping.Web\Models\Example.cs">
+      <Link>WebSut\Model\Example.cs</Link>
+    </Compile>
     <Compile Include="..\ExampleMapping.Web\Models\Rule.cs">
       <Link>WebSut\Model\Rule.cs</Link>
     </Compile>
@@ -149,6 +152,7 @@
     <Compile Include="WebSut\Pages\SubmittablePage.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageBase.cs" />
     <Compile Include="WebSut\Pages\UserStoryPageElement.cs" />
+    <Compile Include="WebSut\WatinExtensions\DocumentExtensions.cs" />
     <Compile Include="WebSut\WatinExtensions\DragAndDrop.cs" />
     <Compile Include="WebSut\WatinExtensions\ElementContainerExtensions.cs" />
     <Compile Include="WebSut\WatinExtensions\ElementExtensions.cs" />

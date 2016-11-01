@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using WatiN.Core;
-using ExampleMapping.Specs.Miscellaneous;
-using ExampleMapping.Specs.WebSut.WatinExtensions;
+using WatiN.Core.Constraints;
 using ExampleMapping.Web.Models;
+using ExampleMapping.Specs.WebSut.WatinExtensions;
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
@@ -27,15 +26,15 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
             set
             {
-                _userStoryName.TypeText(value);
+                _userStoryName.EnterText(value);
             }
         }
 
         public void AddRule(string ruleText)
         {
-            var newRuleFinder = new NewlyCreatedElementFinder<TextField>(Browser, RuleTextElementIdRegex);
+            var newRuleFinder = new NewlyCreatedElementFinder<TextField>(Browser, RuleTextElementConstraint);
             _addNewRuleLink.Click();
-            newRuleFinder.Result.TypeText(ruleText);
+            newRuleFinder.Result.EnterText(ruleText);
         }
 
         public void DeleteRule(string ruleText)
@@ -45,10 +44,15 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
         public void AddExample(string ruleText, string exampleText)
         {
-            var newExampleFinder = new NewlyCreatedElementFinder<TextField>(Browser, ExampleTextElementRegex);
+            var newExampleFinder = new NewlyCreatedElementFinder<TextField>(Browser, ExampleTextElementConstraint);
             var ruleElementsGroup = FindRuleElementsGroup(ruleText);
-            _addnewExampleLink.Drag().DropTo(ruleElementsGroup.RuleText);
-            newExampleFinder.Result.TypeText(exampleText);
+            Browser.Drag(_addnewExampleLink).DropTo(ruleElementsGroup.RuleText);
+            newExampleFinder.Result.EnterText(exampleText);
+        }
+
+        public void DeleteExampleFromRule(string ruleText, string exampleText)
+        {
+            FindRuleElementsGroup(ruleText).FindExampleElementsGroup(exampleText).DeleteButton.Click();
         }
 
         public UserStory GetStoryContent()
@@ -57,47 +61,83 @@ namespace ExampleMapping.Specs.WebSut.Pages
                 new UserStory
                 {
                     Name = UserStoryName,
-                    Rules = RuleElementsGroups.OrderBy(elementsGroup => elementsGroup.RuleText.Name).Select(elementsGroup => new Rule { Name = elementsGroup.RuleText.Text }).ToList()
+                    Rules = GetRuleElementsGroups()
+                                .OrderBy(elementsGroup => elementsGroup.RuleText.Name)
+                                .Select(elementsGroup => 
+                                    new Rule
+                                    {
+                                        Name = elementsGroup.RuleText.Text,
+                                        Examples = elementsGroup
+                                                        .GetExampleElementsGroups()
+                                                        .Select(exampleGroup => new Example { Name = exampleGroup.ExampleText.Text })
+                                                        .ToList()
+                                    }).ToList()
                 };
         }
 
-        private IReadOnlyCollection<RuleElementsGroup> RuleElementsGroups
+        private IEnumerable<RuleElementsGroup> GetRuleElementsGroups()
         {
-            get
-            {
-                return
-                    Browser.Elements<TextField>(RuleTextElementIdRegex)
-                        .Zip(
-                            Browser.Elements<Button>(DeleteRuleButtonIdRegex),
-                            (ruleText, deleteButton) => new RuleElementsGroup(ruleText, deleteButton))
-                        .AsImmutable();
-            }
+            return Browser
+                .Elements<Div>(RuleElementsGroupConstraint)
+                .Select(ruleGroupDiv => new RuleElementsGroup(ruleGroupDiv));
         }
 
         private RuleElementsGroup FindRuleElementsGroup(string ruleText)
         {
-            return RuleElementsGroups.Single(elementsGroup => elementsGroup.RuleText.Text == ruleText);
+            return GetRuleElementsGroups().Single(elementsGroup => elementsGroup.RuleText.Text == ruleText);
         }
 
         private readonly TextField _userStoryName;
         private readonly Link _addNewRuleLink;
         private readonly Link _addnewExampleLink;
 
-        private static readonly Regex RuleTextElementIdRegex = new Regex(@"^Rules\[\d+\]\.Name$", RegexOptions.Compiled);
-        private static readonly Regex ExampleTextElementRegex = new Regex(@"^Rules\[\d+\]\.Examples\[\d+\]\.Name$", RegexOptions.Compiled);
-        private static readonly Regex DeleteRuleButtonIdRegex = new Regex(@"^DeleteRule_\d+$", RegexOptions.Compiled);
+        private static readonly Constraint RuleElementsGroupConstraint = Find.ByClass("ruleElementsGroup");
+        private static readonly Constraint ExampleElementsGroupConstraint = Find.ByClass("exampleElementsGroup");
+        private static readonly Constraint RuleTextElementConstraint = Find.ByClass("ruleWording");
+        private static readonly Constraint ExampleTextElementConstraint = Find.ByClass("exampleWording");
+        private static readonly Constraint DeleteRuleButtonConstraint = Find.ByClass("deleteRule");
+        private static readonly Constraint DeleteExampleButtonConstraint = Find.ByClass("deleteExample");
 
         private class RuleElementsGroup
         {
-            public RuleElementsGroup(TextField ruleText, Button deleteButton)
+            public RuleElementsGroup(Div ruleGroupDiv)
             {
-                RuleText = ruleText;
-                DeleteButton = deleteButton;
+                _ruleGroupDiv = ruleGroupDiv;
+                RuleText = ruleGroupDiv.Elements<TextField>(RuleTextElementConstraint).Single();
+                DeleteButton = ruleGroupDiv.Elements<Button>(DeleteRuleButtonConstraint).Single();
             }
 
             public TextField RuleText { get; }
 
             public Button DeleteButton { get; }
+
+            public IEnumerable<ExampleElementsGroup> GetExampleElementsGroups()
+            {
+                return _ruleGroupDiv.Elements<Div>(ExampleElementsGroupConstraint).Select(divElement => new ExampleElementsGroup(divElement));
+            }
+
+            public ExampleElementsGroup FindExampleElementsGroup(string exampleText)
+            {
+                return GetExampleElementsGroups().Single(exampleGroup => exampleGroup.ExampleText.Text == exampleText);
+            }
+
+            private readonly Div _ruleGroupDiv;
+        }
+
+        private class ExampleElementsGroup
+        {
+            public ExampleElementsGroup(Div divElement)
+            {
+                _divElement = divElement;
+                ExampleText = divElement.Elements<TextField>(ExampleTextElementConstraint).Single();
+                DeleteButton = divElement.Elements<Button>(DeleteExampleButtonConstraint).Single();
+            }
+
+            public TextField ExampleText { get; }
+
+            public Button DeleteButton { get; }
+
+            private readonly Div _divElement;
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using ExampleMapping.Specs.Miscellaneous;
+﻿using System.Diagnostics.Contracts;
 using WatiN.Core;
+using ExampleMapping.Specs.WebSut.WatinExtensions;
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
@@ -18,9 +17,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
         {
             _submitButton.Click();
             Browser.WaitForComplete();
-            Verify.That(
-                !Browser.Html.Contains("An unhandled exception occurred while processing the request"),
-                () => Browser.Body.Parent.OuterHtml);
+            Browser.CheckRenderedPageForServerErrors();
         }
 
         private readonly Button _submitButton;

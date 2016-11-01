@@ -16,7 +16,7 @@ namespace ExampleMapping.Specs.WebSut
                                 LoadUserProfile = true,
                                 CreateNoWindow = false,
                                 UseShellExecute = false,
-                                Arguments = $"/path:\"{WebProjectPathes.RootPath}\" /port:{port} /systray:false",
+                                Arguments = $"/path:\"{WebProjectPathes.RootPath}\" /port:{port} /systray:true",
                                 FileName = FullIisExpressExePath
             };
             

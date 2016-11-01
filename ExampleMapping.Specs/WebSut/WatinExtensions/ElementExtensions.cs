@@ -4,10 +4,11 @@ namespace ExampleMapping.Specs.WebSut.WatinExtensions
 {
     internal static class ElementExtensions
     {
-        public static DragAndDrop Drag(this Element element)
+        public static void EnterText(this TextField textField, string text)
         {
-            element.MouseDown();
-            return new DragAndDrop();
+            textField.Click();
+            textField.Value = text;
+            textField.Change();
         }
     }
 }

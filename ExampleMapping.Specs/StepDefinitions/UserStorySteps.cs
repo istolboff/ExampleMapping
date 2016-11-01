@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using ExampleMapping.Specs.WebSut.Pages;
 using ExampleMapping.Specs.SpecFlow;
@@ -34,9 +35,9 @@ namespace ExampleMapping.Specs.StepDefinitions
         }
 
         [Given(@"I added a new Rule that says '(.*)'")]
-        public static void AddedNewRule(string ruleText)
+        public static void AddNewRule(string ruleText)
         {
-            CurrentUserStoryPage.AddRule(ruleText);
+            AddNewRuleCore(ruleText, Enumerable.Empty<string>());
         }
 
         [Given(@"the User Story '(.*)' has the following Rules")]
@@ -45,8 +46,13 @@ namespace ExampleMapping.Specs.StepDefinitions
             StartedToCreateUserStory(storyName);
             foreach (var ruleRow in rulesText.Rows)
             {
-                AddedNewRule(ruleRow["Rule Text"]);
+                var exampleTexts = ruleRow.ContainsKey("Rule Examples")
+                    ? ruleRow["Rule Examples"].Trim(' ', '{', '}').Split(new[] { "},{", "}, {" }, StringSplitOptions.None)
+                    : Enumerable.Empty<string>();
+
+                AddNewRuleCore(ruleRow["Rule Text"], exampleTexts);
             }
+
             CompleteEditingTheUserStory();
         }
 
@@ -74,6 +80,12 @@ namespace ExampleMapping.Specs.StepDefinitions
             CurrentUserStoryPage.DeleteRule(ruleText);
         }
 
+        [When(@"I delete the Example that says '(.*)' from the Rule '(.*)'")]
+        public static void DeleteExampleFromRule(string exampleText, string ruleText)
+        {
+            CurrentUserStoryPage.DeleteExampleFromRule(exampleText: exampleText, ruleText: ruleText);
+        }
+
         [Then(@"the list of all stories should contain only the following items")]
         public static void ListOfAllStoriesShouldContainOnlyTheFollowingItems(Table expectedStories)
         {
@@ -85,12 +97,17 @@ namespace ExampleMapping.Specs.StepDefinitions
         }
 
         [Then(@"the '(.*)' User Story should have the following Rules")]
-        public static void UserStoryShouldHaveTheFollowingContent(string storyName, Table expectedStoryTabularContent)
+        public static void UserStoryShouldHaveTheFollowingRules(string storyName, Table expectedStoryTabularContent)
         {
             var page = LoadUserStory(storyName);
             var storyContent = page.GetStoryContent();
             var matchingResult = expectedStoryTabularContent.Rows.Match(
-                storyContent.Rules.Select(rule => new { RuleText = rule.Name }));
+                storyContent.Rules.Select(rule => 
+                    new
+                    {
+                        RuleText = rule.Name,
+                        RuleExamples = string.Join(", ", rule.Examples.Select(example => "{" + example.Name + "}"))
+                    }));
             Assert.AreEqual(storyName, storyContent.Name);
             Assert.IsTrue(
                 matchingResult,
@@ -114,6 +131,15 @@ namespace ExampleMapping.Specs.StepDefinitions
         {
             var page = TestRun.ApplicationUnderTest.NavigateTo<ListUserStories>();
             return page.UserStories[storyName].Edit();
+        }
+
+        private static void AddNewRuleCore(string ruleText, IEnumerable<string> exampleTexts)
+        {
+            CurrentUserStoryPage.AddRule(ruleText);
+            foreach (var exampleText in exampleTexts)
+            {
+                CurrentUserStoryPage.AddExample(ruleText, exampleText);
+            }
         }
     }
 }

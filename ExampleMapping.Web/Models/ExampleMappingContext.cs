@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExampleMapping.Web.Models
@@ -18,10 +19,13 @@ namespace ExampleMapping.Web.Models
 
         public DbSet<Rule> Rules { get; set; }
 
+        public DbSet<Example> Examples { get; set; }
+
         public Task<UserStory> FindUserStoryById(long userStoryId)
         {
             return UserStories
                         .Include(userStory => userStory.Rules)
+                            .ThenInclude(rule => rule.Examples)
                         .SingleOrDefaultAsync(userStory => userStory.UserStoryId == userStoryId);
         }
     }

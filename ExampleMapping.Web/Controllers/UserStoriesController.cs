@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using ExampleMapping.Web.Miscellaneous;
@@ -73,10 +74,21 @@ namespace ExampleMapping.Web.Controllers
 
             try
             {
-                var ruleIdsToDelete = userStory.Rules.Select(rule => rule.RuleId).Where(ruleId => ruleId < 0).Select(ruleId => -ruleId).ToArray();
+                var rulesWithExamples = userStory.Rules.Where(rule => rule.Examples != null).AsImmutable();
+                var exampleIdsToDelete = rulesWithExamples
+                    .SelectMany(rule => rule.Examples)
+                    .Where(example => example.ExampleId < 0)
+                    .Select(example => -example.ExampleId).ToArray();
+                foreach (var rule in rulesWithExamples)
+                {
+                    rule.Examples.RemoveIf(example => example.ExampleId < 0);
+                }
+
+                var ruleIdsToDelete = userStory.Rules.Where(rule => rule.RuleId < 0).Select(rule => -rule.RuleId).ToArray();
                 userStory.Rules.RemoveIf(rule => rule.RuleId < 0);
                 _exampleMappingContext.Update(userStory);
-                _exampleMappingContext.Rules.RemoveIf(rule => ruleIdsToDelete.Contains(rule.RuleId));
+                _exampleMappingContext.Examples.RemoveIf(example => Array.IndexOf(exampleIdsToDelete, example.ExampleId) >= 0);
+                _exampleMappingContext.Rules.RemoveIf(rule => Array.IndexOf(ruleIdsToDelete, rule.RuleId) >= 0);
                 await _exampleMappingContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

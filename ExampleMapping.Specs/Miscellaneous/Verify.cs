@@ -21,7 +21,10 @@ namespace ExampleMapping.Specs.Miscellaneous
         public static void That([UsedImplicitly] bool condition, [UsedImplicitly] System.Func<string> buildMessage)
         {
 #if DEBUG
-            System.Diagnostics.Contracts.Contract.Assume(condition, buildMessage());
+            if (!condition)
+            {
+                System.Diagnostics.Contracts.Contract.Assume(condition, buildMessage());
+            }
 #else
             if (!condition)
             {

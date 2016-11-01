@@ -1,5 +1,6 @@
 ﻿using System;
 using WatiN.Core;
+using ExampleMapping.Specs.WebSut.WatinExtensions;
 
 namespace ExampleMapping.Specs.WebSut.Pages
 {
@@ -10,6 +11,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
             Url = url.Uri;
             Browser = url.Browser;
             url.Navigate();
+            Browser.CheckRenderedPageForServerErrors();
         }
 
         public override string ToString()

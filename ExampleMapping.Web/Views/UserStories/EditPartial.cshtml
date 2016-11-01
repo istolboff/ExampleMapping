@@ -22,29 +22,47 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
                 @{
-                    foreach (var ruleElementsGroup in (Model?.Rules ?? Enumerable.Empty<Rule>()).Select((rule, index) =>
+                    foreach (var ruleElementsGroup in (Model?.Rules ?? Enumerable.Empty<Rule>()).Select((rule, ruleIndex) =>
                         new
                         {
-                            GroupName = $"RuleElementsGroup_{rule.RuleId}",
-                            IdInputName = $"Rules[{index}].RuleId",
-                            TextInputName = $"Rules[{index}].Name",
-                            DeleteButtonName = $"DeleteRule_{index}",
-                            AddExampleLinkName = $"AddExample_{index}",
+                            RuleIndex = ruleIndex,
+                            GroupId = $"RuleElementsGroup_{rule.RuleId}",
+                            IdInputName = $"Rules[{ruleIndex}].RuleId",
+                            TextInputName = $"Rules[{ruleIndex}].Name",
+                            DeleteButtonName = $"DeleteRule_{ruleIndex}",
+                            AddExampleLinkName = $"AddExample_{ruleIndex}",
                             Rule = rule
                         }))
                     {
-                        <div id="@ruleElementsGroup.GroupName">
+                        <div id="@ruleElementsGroup.GroupId" class="ruleElementsGroup" ondrop="Globals.DragDropProcessor.Drop(event, this)" ondragover="Globals.DragDropProcessor.DragOver(event, this)">
                             <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.RuleId" />
-                            <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" ondrop="DropBlankExample(event)" ondragover="event.preventDefault()" />
-                            <input type="button" class="ruleDeleter" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="AllRulesCollection.MarkRuleAsDeleted('@ruleElementsGroup.GroupName')" />
+                            <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
+                            <input type="button" class="deleteRule" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="Globals.RuleOperations.MarkRuleAsDeleted('@ruleElementsGroup.GroupId')" />
+                            @{
+                                foreach (var indexedExample in (ruleElementsGroup.Rule.Examples ?? Enumerable.Empty<Example>()).Select((example, exampleIndex) =>
+                                    new
+                                    {
+                                        GroupId = $"ExampleElementsGroup_{exampleIndex}",
+                                        IdInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].ExampleId",
+                                        TextInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].Name",
+                                        Example = example
+                                    }))
+                                {
+                                    <div id="@indexedExample.GroupId" class="exampleElementsGroup">
+                                        <input type="hidden" id="ExampleId" name="@indexedExample.IdInputName" value="@indexedExample.Example.ExampleId" />
+                                        <input type="text" class="exampleWording" name="@indexedExample.TextInputName" value="@indexedExample.Example.Name" />
+                                        <input type="button" class="deleteExample" value="Delete" onclick="Globals.RuleOperations.MarkExampleAsDeleted('@indexedExample.GroupId')" />
+                                    </div>
+                                }
+                            }
                         </div>
                     }
                 }
             </div>
         </div>
         <div>
-            <a id="AddNewRule" href="javascript:AllRulesCollection.AddBlankRule()">Rule Blanks</a>
-            <a id="AddNewExample" href="#" draggable="true" ondragstart="StartDraggingBlankExample(event)">Add Example</a>
+            <a id="AddNewRule" href="javascript:Globals.RuleOperations.AddBlankRule()">Rule Blanks</a>
+            <a id="AddNewExample" href="#" draggable="true" ondragstart="Globals.DragDropProcessor.StartDraggingBlankExample(event)">Add Example</a>
         </div>
         @if (viewType == ViewType.EditExisting)
         {

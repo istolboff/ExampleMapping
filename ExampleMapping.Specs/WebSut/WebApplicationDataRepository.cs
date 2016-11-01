@@ -23,15 +23,6 @@ namespace ExampleMapping.Specs.WebSut
             }
         }
 
-        private void ClearTable(string tableName)
-        {
-            using (var sqLiteCommand = _sqLiteConnection.CreateCommand())
-            {
-                sqLiteCommand.CommandText = $"delete from {tableName}";
-                sqLiteCommand.ExecuteNonQuery();
-            }
-        }
-
         public static void EraseFromDisk()
         {
             File.Delete(WebProjectPathes.SqliteDatabaseFilePath);
@@ -40,6 +31,15 @@ namespace ExampleMapping.Specs.WebSut
         public void Dispose()
         {
             _sqLiteConnection.Dispose();
+        }
+
+        private void ClearTable(string tableName)
+        {
+            using (var sqLiteCommand = _sqLiteConnection.CreateCommand())
+            {
+                sqLiteCommand.CommandText = $"delete from {tableName}";
+                sqLiteCommand.ExecuteNonQuery();
+            }
         }
 
         private readonly SQLiteConnection _sqLiteConnection;
