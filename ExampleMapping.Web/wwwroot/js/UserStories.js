@@ -37,12 +37,9 @@ function newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleE
     // (see https://docs.asp.net/en/latest/mvc/models/model-binding.html for details)
 
     return {
-        RuleCount: function () {
-            return document.getElementsByClassName(ruleWordingClassName).length;
-        },
-
         SetRuleWordingElementName: function (ruleWordingHtmlElement) {
-            ruleWordingHtmlElement.name = "Rules[" + this.RuleCount() + "].Name";
+            var exisitngRuleCount = document.getElementsByClassName(ruleWordingClassName).length;
+            ruleWordingHtmlElement.name = "Rules[" + exisitngRuleCount + "].Name";
         },
 
         SetExampleWordingElementName: function (exampleWordingHtmlElement, ruleElementsGroup) {
@@ -51,10 +48,6 @@ function newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleE
                 ruleElementsGroup.children,
                 function (htmlElement) { return htmlElement.className !== null && htmlElement.className === exampleElementsGroupClassName; });
             exampleWordingHtmlElement.name = ruleWordingHtmlElement.name.replace(".Name", ".Examples[" + existingExamplesCount + "].Name");
-        },
-
-        MakeRuleElementName: function (ruleIndex, backingPropertyName) {
-            return "Rules[" + ruleIndex + "]." + backingPropertyName;
         },
 
         FindRuleHtmlElement: function (ruleElementsGroup) {
@@ -70,7 +63,6 @@ function newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, 
         DragDropProcessor: null,
 
         AddBlankRule: function () {
-            var that = this;
             var dragDropProcessor = this.DragDropProcessor;
 
             var newRuleElementsGroup = document.createElement("div");
@@ -78,18 +70,10 @@ function newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, 
             newRuleElementsGroup.ondragover = function (event) { dragDropProcessor.DragOver(event, newRuleElementsGroup); };
             newRuleElementsGroup.ondrop = function (event) { dragDropProcessor.Drop(event, newRuleElementsGroup); };
 
-            var newRuleText = document.createElement("input");
-            newRuleText.type = "text";
-            newRuleText.className = ruleWordingClassName;
+            var newRuleText = this.AddEntityTextElement(ruleWordingClassName, newRuleElementsGroup);
             htmlElementNamesSetter.SetRuleWordingElementName(newRuleText);
-            newRuleElementsGroup.appendChild(newRuleText);
 
-            var newDeleteRuleButton = document.createElement("input");
-            newDeleteRuleButton.type = "button";
-            newDeleteRuleButton.className = "deleteRule";
-            newDeleteRuleButton.value = "Delete";
-            newDeleteRuleButton.onclick = function () { that.RemoveDomElement(newRuleElementsGroup); };
-            newRuleElementsGroup.appendChild(newDeleteRuleButton);
+            this.AddEntityDeleterElement("deleteRule", newRuleElementsGroup);
 
             var existingRulesContainer = document.getElementById("UserStoryContent");
             existingRulesContainer.appendChild(newRuleElementsGroup);
@@ -97,31 +81,18 @@ function newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, 
             newRuleText.focus();
         },
 
-        MarkRuleAsDeleted: function(ruleElementsGroupId) {
-            var ruleElementsGroup = document.getElementById(ruleElementsGroupId);
-            var ruleIdElement = Enumerable.Single(ruleElementsGroup.children, function (element) { return element.id !== null && element.id === "RuleId"; });
-            ruleIdElement.value = -ruleIdElement.value;
-            ruleElementsGroup.style.display = "none";
+        MarkRuleAsDeleted: function (ruleElementsGroupId) {
+            this.MarkEntityAsDeleted(ruleElementsGroupId, "RuleId");
         },
 
         AddBlankExampleToRule: function (ruleElementsGroup) {
-            var that = this;
-
             var newExampleElementsGroup = document.createElement("div");
             newExampleElementsGroup.className = exampleElementsGroupClassName;
 
-            var newExampleText = document.createElement("input");
-            newExampleText.type = "text";
-            newExampleText.className = "exampleWording";
+            var newExampleText = this.AddEntityTextElement("exampleWording", newExampleElementsGroup);
             htmlElementNamesSetter.SetExampleWordingElementName(newExampleText, ruleElementsGroup);
-            newExampleElementsGroup.appendChild(newExampleText);
 
-            var newDeleteExampleButton = document.createElement("input");
-            newDeleteExampleButton.type = "button";
-            newDeleteExampleButton.className = "deleteExample";
-            newDeleteExampleButton.value = "Delete";
-            newDeleteExampleButton.onclick = function () { that.RemoveDomElement(newExampleElementsGroup); };
-            newExampleElementsGroup.appendChild(newDeleteExampleButton);
+            this.AddEntityDeleterElement("deleteExample", newExampleElementsGroup);
 
             ruleElementsGroup.appendChild(newExampleElementsGroup);
 
@@ -129,14 +100,31 @@ function newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, 
         },
 
         MarkExampleAsDeleted: function (exampleElementsGroupId) {
-            var exampleElementsGroup = document.getElementById(exampleElementsGroupId);
-            var exampleIdElement = Enumerable.Single(exampleElementsGroup.children, function (element) { return element.id !== null && element.id === "ExampleId"; });
-            exampleIdElement.value = -exampleIdElement.value;
-            exampleElementsGroup.style.display = "none";
+            this.MarkEntityAsDeleted(exampleElementsGroupId, "ExampleId");
         },
 
-        RemoveDomElement: function (domElement) {
-            domElement.parentNode.removeChild(domElement);
+        AddEntityTextElement: function(inputElementClassName, entityElementsGroup) {
+            var entityText = document.createElement("input");
+            entityText.type = "text";
+            entityText.className = inputElementClassName;
+            entityElementsGroup.appendChild(entityText);
+            return entityText;
+        },
+
+        AddEntityDeleterElement: function (deleterClassName, entityElementsGroup) {
+            var newDeleteEntityButton = document.createElement("input");
+            newDeleteEntityButton.type = "button";
+            newDeleteEntityButton.className = deleterClassName;
+            newDeleteEntityButton.value = "Delete";
+            newDeleteEntityButton.onclick = function () { entityElementsGroup.parentNode.removeChild(entityElementsGroup); };
+            entityElementsGroup.appendChild(newDeleteEntityButton);
+        },
+
+        MarkEntityAsDeleted: function (entityElementsGroupId, idOfhiddenInputWithEndtityId) {
+            var entityElementsGroup = document.getElementById(entityElementsGroupId);
+            var entityIdElement = Enumerable.Single(entityElementsGroup.children, function (element) { return element.id !== null && element.id === idOfhiddenInputWithEndtityId; });
+            entityIdElement.value = -entityIdElement.value;
+            entityElementsGroup.style.display = "none";
         }
     };
 }

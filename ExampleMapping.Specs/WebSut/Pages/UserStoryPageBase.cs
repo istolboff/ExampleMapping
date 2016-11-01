@@ -39,7 +39,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
         public void DeleteRule(string ruleText)
         {
-            FindRuleElementsGroup(ruleText).DeleteButton.Click();
+            FindRuleElementsGroup(ruleText).Delete();
         }
 
         public void AddExample(string ruleText, string exampleText)
@@ -52,7 +52,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
         public void DeleteExampleFromRule(string ruleText, string exampleText)
         {
-            FindRuleElementsGroup(ruleText).FindExampleElementsGroup(exampleText).DeleteButton.Click();
+            FindRuleElementsGroup(ruleText).FindExampleElementsGroup(exampleText).Delete();
         }
 
         public UserStory GetStoryContent()
@@ -78,7 +78,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
         private IEnumerable<RuleElementsGroup> GetRuleElementsGroups()
         {
             return Browser
-                .Elements<Div>(RuleElementsGroupConstraint)
+                .Elements<Div>(Find.ByClass("ruleElementsGroup"))
                 .Select(ruleGroupDiv => new RuleElementsGroup(ruleGroupDiv));
         }
 
@@ -91,29 +91,28 @@ namespace ExampleMapping.Specs.WebSut.Pages
         private readonly Link _addNewRuleLink;
         private readonly Link _addnewExampleLink;
 
-        private static readonly Constraint RuleElementsGroupConstraint = Find.ByClass("ruleElementsGroup");
-        private static readonly Constraint ExampleElementsGroupConstraint = Find.ByClass("exampleElementsGroup");
         private static readonly Constraint RuleTextElementConstraint = Find.ByClass("ruleWording");
         private static readonly Constraint ExampleTextElementConstraint = Find.ByClass("exampleWording");
-        private static readonly Constraint DeleteRuleButtonConstraint = Find.ByClass("deleteRule");
-        private static readonly Constraint DeleteExampleButtonConstraint = Find.ByClass("deleteExample");
 
         private class RuleElementsGroup
         {
-            public RuleElementsGroup(Div ruleGroupDiv)
+            public RuleElementsGroup(IElementContainer ruleGroupDiv)
             {
                 _ruleGroupDiv = ruleGroupDiv;
                 RuleText = ruleGroupDiv.Elements<TextField>(RuleTextElementConstraint).Single();
-                DeleteButton = ruleGroupDiv.Elements<Button>(DeleteRuleButtonConstraint).Single();
+                _deleteButton = ruleGroupDiv.Elements<Button>(Find.ByClass("deleteRule")).Single();
             }
 
             public TextField RuleText { get; }
 
-            public Button DeleteButton { get; }
+            public void Delete()
+            {
+                _deleteButton.Click();
+            }
 
             public IEnumerable<ExampleElementsGroup> GetExampleElementsGroups()
             {
-                return _ruleGroupDiv.Elements<Div>(ExampleElementsGroupConstraint).Select(divElement => new ExampleElementsGroup(divElement));
+                return _ruleGroupDiv.Elements<Div>(Find.ByClass("exampleElementsGroup")).Select(divElement => new ExampleElementsGroup(divElement));
             }
 
             public ExampleElementsGroup FindExampleElementsGroup(string exampleText)
@@ -121,23 +120,26 @@ namespace ExampleMapping.Specs.WebSut.Pages
                 return GetExampleElementsGroups().Single(exampleGroup => exampleGroup.ExampleText.Text == exampleText);
             }
 
-            private readonly Div _ruleGroupDiv;
+            private readonly IElementContainer _ruleGroupDiv;
+            private readonly Button _deleteButton;
         }
 
         private class ExampleElementsGroup
         {
-            public ExampleElementsGroup(Div divElement)
+            public ExampleElementsGroup(IElementContainer divElement)
             {
-                _divElement = divElement;
                 ExampleText = divElement.Elements<TextField>(ExampleTextElementConstraint).Single();
-                DeleteButton = divElement.Elements<Button>(DeleteExampleButtonConstraint).Single();
+                _deleteButton = divElement.Elements<Button>(Find.ByClass("deleteExample")).Single();
             }
 
             public TextField ExampleText { get; }
 
-            public Button DeleteButton { get; }
+            public void Delete()
+            {
+                _deleteButton.Click();
+            }
 
-            private readonly Div _divElement;
+            private readonly Button _deleteButton;
         }
     }
 }
