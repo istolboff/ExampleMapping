@@ -1,6 +1,6 @@
 ﻿namespace ExampleMapping.Web.Models
 {
-    public class Question
+    public class Question : IEntity
     {
         public long Id { get; set; }
 

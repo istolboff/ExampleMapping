@@ -2,7 +2,7 @@
 
 namespace ExampleMapping.Web.Models
 {
-    public class UserStory
+    public class UserStory : IEntity
     {
         public long Id { get; set; }
 

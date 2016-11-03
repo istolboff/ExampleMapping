@@ -101,6 +101,9 @@
     <Compile Include="..\ExampleMapping.Web\Models\Example.cs">
       <Link>WebSut\Model\Example.cs</Link>
     </Compile>
+    <Compile Include="..\ExampleMapping.Web\Models\IEntity.cs">
+      <Link>WebSut\Model\IEntity.cs</Link>
+    </Compile>
     <Compile Include="..\ExampleMapping.Web\Models\Question.cs">
       <Link>WebSut\Model\Question.cs</Link>
     </Compile>

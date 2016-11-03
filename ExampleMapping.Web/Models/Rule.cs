@@ -2,7 +2,7 @@
 
 namespace ExampleMapping.Web.Models
 {
-    public class Rule
+    public class Rule : IEntity
     {
         public long Id { get; set; }
 
