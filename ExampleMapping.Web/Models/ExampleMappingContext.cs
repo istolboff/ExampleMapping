@@ -21,11 +21,14 @@ namespace ExampleMapping.Web.Models
 
         public DbSet<Example> Examples { get; set; }
 
+        public DbSet<Question> Questions { get; set; }
+
         public Task<UserStory> FindUserStoryById(long userStoryId)
         {
             return UserStories
                         .Include(userStory => userStory.Rules)
                             .ThenInclude(rule => rule.Examples)
+                        .Include(userStory => userStory.Questions)
                         .SingleOrDefaultAsync(userStory => userStory.UserStoryId == userStoryId);
         }
     }

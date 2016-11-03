@@ -32,14 +32,14 @@ var Enumerable = {
     }
 };
 
-function newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleElementsGroupClassName) {
+function newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleElementsGroupClassName, questionWordingClassName) {
     // Generate html elements' names so that ASP.Net Core Model Binding could do its job.
     // (see https://docs.asp.net/en/latest/mvc/models/model-binding.html for details)
 
     return {
         SetRuleWordingElementName: function (ruleWordingHtmlElement) {
-            var exisitngRuleCount = document.getElementsByClassName(ruleWordingClassName).length;
-            ruleWordingHtmlElement.name = "Rules[" + exisitngRuleCount + "].Name";
+            var exisitngRulesCount = document.getElementsByClassName(ruleWordingClassName).length;
+            ruleWordingHtmlElement.name = "Rules[" + exisitngRulesCount + "].Name";
         },
 
         SetExampleWordingElementName: function (exampleWordingHtmlElement, ruleElementsGroup) {
@@ -50,6 +50,11 @@ function newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleE
             exampleWordingHtmlElement.name = ruleWordingHtmlElement.name.replace(".Name", ".Examples[" + existingExamplesCount + "].Name");
         },
 
+        SetQuestionWordingElementName: function (questionWordingHtmlElement) {
+            var exisitngQuestionsCount = document.getElementsByClassName(questionWordingClassName).length;
+            questionWordingHtmlElement.name = "Questions[" + exisitngQuestionsCount + "].Name";
+        },
+
         FindRuleHtmlElement: function (ruleElementsGroup) {
             return Enumerable.Single(
                 ruleElementsGroup.children,
@@ -58,12 +63,12 @@ function newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleE
     };
 }
 
-function newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, htmlElementNamesSetter) {
+function newUserStoryContentOperations(ruleWordingClassName, exampleElementsGroupClassName, htmlElementNamesSetter) {
     return {
-        DragDropProcessor: null,
+        _dragDropProcessor: null,
 
         AddBlankRule: function () {
-            var dragDropProcessor = this.DragDropProcessor;
+            var dragDropProcessor = this._dragDropProcessor;
 
             var newRuleElementsGroup = document.createElement("div");
             newRuleElementsGroup.className = "ruleElementsGroup";
@@ -101,6 +106,25 @@ function newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, 
 
         MarkExampleAsDeleted: function (exampleElementsGroupId) {
             this.MarkEntityAsDeleted(exampleElementsGroupId, "ExampleId");
+        },
+
+        AddBlankQuestion: function() {
+            var newQuestionElementsGroup = document.createElement("div");
+            newQuestionElementsGroup.className = "questionElementsGroup";
+
+            var newQuestionText = this.AddEntityTextElement("questionWording", newQuestionElementsGroup);
+            htmlElementNamesSetter.SetQuestionWordingElementName(newQuestionText);
+
+            this.AddEntityDeleterElement("deleteRule", newQuestionElementsGroup);
+
+            var existingRulesContainer = document.getElementById("UserStoryContent");
+            existingRulesContainer.appendChild(newQuestionElementsGroup);
+
+            newQuestionText.focus();
+        },
+
+        MarkQuestionAsDeleted: function (questionElementsGroupId) {
+            this.MarkEntityAsDeleted(questionElementsGroupId, "QuestionId");
         },
 
         AddEntityTextElement: function(inputElementClassName, entityElementsGroup) {
@@ -166,21 +190,19 @@ function newDragDropProcessor(ruleOperations) {
     };
 }
 
-
-function newGlobals() {
+var Globals = function () {
     var ruleWordingClassName = "ruleWording";
     var exampleElementsGroupClassName = "exampleElementsGroup";
+    var questionWordingClassName = "questionWording";
 
-    var htmlElementNamesSetter = newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleElementsGroupClassName);
-    var ruleOperations = newRuleOperations(ruleWordingClassName, exampleElementsGroupClassName, htmlElementNamesSetter);
-    var dragDropProcessor = newDragDropProcessor(ruleOperations);
+    var htmlElementNamesSetter = newAspNetModelBindingFriendlyNamesSetter(ruleWordingClassName, exampleElementsGroupClassName, questionWordingClassName);
+    var userStoryContentOperations = newUserStoryContentOperations(ruleWordingClassName, exampleElementsGroupClassName, htmlElementNamesSetter);
+    var dragDropProcessor = newDragDropProcessor(userStoryContentOperations);
 
-    ruleOperations.DragDropProcessor = dragDropProcessor;
+    userStoryContentOperations._dragDropProcessor = dragDropProcessor;
 
     return {
-        RuleOperations: ruleOperations,
+        UserStoryContentOperations: userStoryContentOperations,
         DragDropProcessor: dragDropProcessor
     };
-}
-
-var Globals = newGlobals();
+}();

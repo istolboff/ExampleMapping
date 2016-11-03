@@ -14,5 +14,7 @@ namespace ExampleMapping.Web.Models
         public string Name { get; set; }
 
         public ICollection<Rule> Rules { get; set; }
+
+        public ICollection<Question> Questions { get; set; }
     }
 }

@@ -101,6 +101,9 @@
     <Compile Include="..\ExampleMapping.Web\Models\Example.cs">
       <Link>WebSut\Model\Example.cs</Link>
     </Compile>
+    <Compile Include="..\ExampleMapping.Web\Models\Question.cs">
+      <Link>WebSut\Model\Question.cs</Link>
+    </Compile>
     <Compile Include="..\ExampleMapping.Web\Models\Rule.cs">
       <Link>WebSut\Model\Rule.cs</Link>
     </Compile>
@@ -111,6 +114,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ExamplesInsideSingleRuleManipulation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\QuestionsInsideSingleUserStoryManipulation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionsInsideSingleUserStoryManipulation.feature</DependentUpon>
     </Compile>
     <Compile Include="Features\RulesInsideSingleUserStoryManipulation.feature.cs">
       <AutoGen>True</AutoGen>
@@ -167,6 +175,10 @@
     <None Include="Features\ExamplesInsideSingleRuleManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ExamplesInsideSingleRuleManipulation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\QuestionsInsideSingleUserStoryManipulation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>QuestionsInsideSingleUserStoryManipulation.feature.cs</LastGenOutput>
     </None>
     <None Include="Features\RulesInsideSingleUserStoryManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

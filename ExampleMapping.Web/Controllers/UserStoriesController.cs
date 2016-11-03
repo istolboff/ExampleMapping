@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -74,7 +75,8 @@ namespace ExampleMapping.Web.Controllers
 
             try
             {
-                var rulesWithExamples = userStory.Rules.Where(rule => rule.Examples != null).AsImmutable();
+                var rules = userStory.Rules ?? new List<Rule>();
+                var rulesWithExamples = rules.Where(rule => rule.Examples != null).AsImmutable();
                 var exampleIdsToDelete = rulesWithExamples
                     .SelectMany(rule => rule.Examples)
                     .Where(example => example.ExampleId < 0)
@@ -84,11 +86,18 @@ namespace ExampleMapping.Web.Controllers
                     rule.Examples.RemoveIf(example => example.ExampleId < 0);
                 }
 
-                var ruleIdsToDelete = userStory.Rules.Where(rule => rule.RuleId < 0).Select(rule => -rule.RuleId).ToArray();
-                userStory.Rules.RemoveIf(rule => rule.RuleId < 0);
+                var ruleIdsToDelete = rules.Where(rule => rule.RuleId < 0).Select(rule => -rule.RuleId).ToArray();
+                rules.RemoveIf(rule => rule.RuleId < 0);
+
+                var questions = userStory.Questions ?? new List<Question>();
+                var questionIdsToDelete = questions.Where(question => question.QuestionId < 0).Select(question => -question.QuestionId).ToArray();
+                questions.RemoveIf(question => question.QuestionId < 0);
+
                 _exampleMappingContext.Update(userStory);
                 _exampleMappingContext.Examples.RemoveIf(example => Array.IndexOf(exampleIdsToDelete, example.ExampleId) >= 0);
                 _exampleMappingContext.Rules.RemoveIf(rule => Array.IndexOf(ruleIdsToDelete, rule.RuleId) >= 0);
+                _exampleMappingContext.Questions.RemoveIf(question => Array.IndexOf(questionIdsToDelete, question.QuestionId) >= 0);
+
                 await _exampleMappingContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

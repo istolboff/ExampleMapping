@@ -37,7 +37,7 @@
                         <div id="@ruleElementsGroup.GroupId" class="ruleElementsGroup" ondrop="Globals.DragDropProcessor.Drop(event, this)" ondragover="Globals.DragDropProcessor.DragOver(event, this)">
                             <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.RuleId" />
                             <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
-                            <input type="button" class="deleteRule" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="Globals.RuleOperations.MarkRuleAsDeleted('@ruleElementsGroup.GroupId')" />
+                            <input type="button" class="deleteRule" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="Globals.UserStoryContentOperations.MarkRuleAsDeleted('@ruleElementsGroup.GroupId')" />
                             @{
                                 foreach (var indexedExample in (ruleElementsGroup.Rule.Examples ?? Enumerable.Empty<Example>()).Select((example, exampleIndex) =>
                                     new
@@ -51,18 +51,36 @@
                                     <div id="@indexedExample.GroupId" class="exampleElementsGroup">
                                         <input type="hidden" id="ExampleId" name="@indexedExample.IdInputName" value="@indexedExample.Example.ExampleId" />
                                         <input type="text" class="exampleWording" name="@indexedExample.TextInputName" value="@indexedExample.Example.Name" />
-                                        <input type="button" class="deleteExample" value="Delete" onclick="Globals.RuleOperations.MarkExampleAsDeleted('@indexedExample.GroupId')" />
+                                        <input type="button" class="deleteExample" value="Delete" onclick="Globals.UserStoryContentOperations.MarkExampleAsDeleted('@indexedExample.GroupId')" />
                                     </div>
                                 }
                             }
+                        </div>
+                     }
+
+                    foreach (var questionElementsGroup in (Model?.Questions ?? Enumerable.Empty<Question>()).Select((question, questionIndex) =>
+                        new
+                        {
+                            QuestionIndex = questionIndex,
+                            GroupId = $"QuestionElementsGroup_{question.QuestionId}",
+                            IdInputName = $"Questions[{questionIndex}].QuestionId",
+                            TextInputName = $"Questions[{questionIndex}].Name",
+                            Question = question
+                        }))
+                    {
+                        <div id="@questionElementsGroup.GroupId" class="questionElementsGroup">
+                            <input type="hidden" id="QuestionId" name="@questionElementsGroup.IdInputName" value="@questionElementsGroup.Question.QuestionId" />
+                            <input type="text" class="questionWording" name="@questionElementsGroup.TextInputName" value="@questionElementsGroup.Question.Name" />
+                            <input type="button" class="deleteQuestion" value="Delete" onclick="Globals.UserStoryContentOperations.MarkQuestionAsDeleted('@questionElementsGroup.GroupId')" />
                         </div>
                     }
                 }
             </div>
         </div>
         <div>
-            <a id="AddNewRule" href="javascript:Globals.RuleOperations.AddBlankRule()">Rule Blanks</a>
+            <a id="AddNewRule" href="javascript:Globals.UserStoryContentOperations.AddBlankRule()">Rule Blanks</a>
             <a id="AddNewExample" href="#" draggable="true" ondragstart="Globals.DragDropProcessor.StartDraggingBlankExample(event)">Add Example</a>
+            <a id="AddNewQuestion" href="javascript:Globals.UserStoryContentOperations.AddBlankQuestion()">Add Question</a>
         </div>
         @if (viewType == ViewType.EditExisting)
         {

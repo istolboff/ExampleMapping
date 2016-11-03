@@ -15,6 +15,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
             _userStoryName = Browser.TextField(Find.ByName("Name"));
             _addNewRuleLink = Browser.Link(Find.ById("AddNewRule"));
             _addnewExampleLink = Browser.Link(Find.ById("AddNewExample"));
+            _addNewQuestionLink = Browser.Link(Find.ById("AddNewQuestion"));
         }
 
         public string UserStoryName
@@ -42,7 +43,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
             FindRuleElementsGroup(ruleText).Delete();
         }
 
-        public void AddExample(string ruleText, string exampleText)
+        public void AddExampleToRule(string ruleText, string exampleText)
         {
             var newExampleFinder = new NewlyCreatedElementFinder<TextField>(Browser, ExampleTextElementConstraint);
             var ruleElementsGroup = FindRuleElementsGroup(ruleText);
@@ -53,6 +54,18 @@ namespace ExampleMapping.Specs.WebSut.Pages
         public void DeleteExampleFromRule(string ruleText, string exampleText)
         {
             FindRuleElementsGroup(ruleText).FindExampleElementsGroup(exampleText).Delete();
+        }
+
+        public void AddQuestion(string questionText)
+        {
+            var newQuestionFinder = new NewlyCreatedElementFinder<TextField>(Browser, QuestionTextElementConstraint);
+            _addNewQuestionLink.Click();
+            newQuestionFinder.Result.EnterText(questionText);
+        }
+
+        public void DeleteQuestion(string questionText)
+        {
+            FindQuestionElementGroup(questionText).Delete();
         }
 
         public UserStory GetStoryContent()
@@ -71,7 +84,11 @@ namespace ExampleMapping.Specs.WebSut.Pages
                                                         .GetExampleElementsGroups()
                                                         .Select(exampleGroup => new Example { Name = exampleGroup.ExampleText.Text })
                                                         .ToList()
-                                    }).ToList()
+                                    }).ToList(),
+                    Questions = GetQuestionElementsGroups()
+                                .OrderBy(elementsGroup => elementsGroup.QuestionText.Name)
+                                .Select(elementsGroup => new Question { Name = elementsGroup.QuestionText.Text })
+                                .ToList()
                 };
         }
 
@@ -87,12 +104,26 @@ namespace ExampleMapping.Specs.WebSut.Pages
             return GetRuleElementsGroups().Single(elementsGroup => elementsGroup.RuleText.Text == ruleText);
         }
 
+        private IEnumerable<QuestionElementsGroup> GetQuestionElementsGroups()
+        {
+            return Browser
+                .Elements<Div>(Find.ByClass("questionElementsGroup"))
+                .Select(questionGroupDiv => new QuestionElementsGroup(questionGroupDiv));
+        }
+
+        private QuestionElementsGroup FindQuestionElementGroup(string questionText)
+        {
+            return GetQuestionElementsGroups().Single(elementsGroup => elementsGroup.QuestionText.Text == questionText);
+        }
+
         private readonly TextField _userStoryName;
         private readonly Link _addNewRuleLink;
         private readonly Link _addnewExampleLink;
+        private readonly Link _addNewQuestionLink;
 
         private static readonly Constraint RuleTextElementConstraint = Find.ByClass("ruleWording");
         private static readonly Constraint ExampleTextElementConstraint = Find.ByClass("exampleWording");
+        private static readonly Constraint QuestionTextElementConstraint = Find.ByClass("questionWording");
 
         private class RuleElementsGroup
         {
@@ -133,6 +164,24 @@ namespace ExampleMapping.Specs.WebSut.Pages
             }
 
             public TextField ExampleText { get; }
+
+            public void Delete()
+            {
+                _deleteButton.Click();
+            }
+
+            private readonly Button _deleteButton;
+        }
+
+        private class QuestionElementsGroup
+        {
+            public QuestionElementsGroup(IElementContainer divElement)
+            {
+                QuestionText = divElement.Elements<TextField>(QuestionTextElementConstraint).Single();
+                _deleteButton = divElement.Elements<Button>(Find.ByClass("deleteQuestion")).Single();
+            }
+
+            public TextField QuestionText { get; }
 
             public void Delete()
             {
