@@ -4,12 +4,7 @@ namespace ExampleMapping.Web.Models
 {
     public class UserStory
     {
-        public UserStory()
-        {
-            Rules = new List<Rule>();
-        }
-
-        public long UserStoryId { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
 

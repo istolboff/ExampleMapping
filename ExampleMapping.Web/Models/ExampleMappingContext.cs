@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExampleMapping.Web.Models
@@ -29,7 +28,7 @@ namespace ExampleMapping.Web.Models
                         .Include(userStory => userStory.Rules)
                             .ThenInclude(rule => rule.Examples)
                         .Include(userStory => userStory.Questions)
-                        .SingleOrDefaultAsync(userStory => userStory.UserStoryId == userStoryId);
+                        .SingleOrDefaultAsync(userStory => userStory.Id == userStoryId);
         }
     }
 }

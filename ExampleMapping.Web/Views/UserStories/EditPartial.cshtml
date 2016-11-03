@@ -26,8 +26,8 @@
                         new
                         {
                             RuleIndex = ruleIndex,
-                            GroupId = $"RuleElementsGroup_{rule.RuleId}",
-                            IdInputName = $"Rules[{ruleIndex}].RuleId",
+                            GroupId = $"RuleElementsGroup_{rule.Id}",
+                            IdInputName = $"Rules[{ruleIndex}].Id",
                             TextInputName = $"Rules[{ruleIndex}].Name",
                             DeleteButtonName = $"DeleteRule_{ruleIndex}",
                             AddExampleLinkName = $"AddExample_{ruleIndex}",
@@ -35,7 +35,7 @@
                         }))
                     {
                         <div id="@ruleElementsGroup.GroupId" class="ruleElementsGroup" ondrop="Globals.DragDropProcessor.Drop(event, this)" ondragover="Globals.DragDropProcessor.DragOver(event, this)">
-                            <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.RuleId" />
+                            <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.Id" />
                             <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
                             <input type="button" class="deleteRule" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="Globals.UserStoryContentOperations.MarkRuleAsDeleted('@ruleElementsGroup.GroupId')" />
                             @{
@@ -43,13 +43,13 @@
                                     new
                                     {
                                         GroupId = $"ExampleElementsGroup_{exampleIndex}",
-                                        IdInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].ExampleId",
+                                        IdInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].Id",
                                         TextInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].Name",
                                         Example = example
                                     }))
                                 {
                                     <div id="@indexedExample.GroupId" class="exampleElementsGroup">
-                                        <input type="hidden" id="ExampleId" name="@indexedExample.IdInputName" value="@indexedExample.Example.ExampleId" />
+                                        <input type="hidden" id="ExampleId" name="@indexedExample.IdInputName" value="@indexedExample.Example.Id" />
                                         <input type="text" class="exampleWording" name="@indexedExample.TextInputName" value="@indexedExample.Example.Name" />
                                         <input type="button" class="deleteExample" value="Delete" onclick="Globals.UserStoryContentOperations.MarkExampleAsDeleted('@indexedExample.GroupId')" />
                                     </div>
@@ -62,14 +62,14 @@
                         new
                         {
                             QuestionIndex = questionIndex,
-                            GroupId = $"QuestionElementsGroup_{question.QuestionId}",
-                            IdInputName = $"Questions[{questionIndex}].QuestionId",
+                            GroupId = $"QuestionElementsGroup_{question.Id}",
+                            IdInputName = $"Questions[{questionIndex}].Id",
                             TextInputName = $"Questions[{questionIndex}].Name",
                             Question = question
                         }))
                     {
                         <div id="@questionElementsGroup.GroupId" class="questionElementsGroup">
-                            <input type="hidden" id="QuestionId" name="@questionElementsGroup.IdInputName" value="@questionElementsGroup.Question.QuestionId" />
+                            <input type="hidden" id="QuestionId" name="@questionElementsGroup.IdInputName" value="@questionElementsGroup.Question.Id" />
                             <input type="text" class="questionWording" name="@questionElementsGroup.TextInputName" value="@questionElementsGroup.Question.Name" />
                             <input type="button" class="deleteQuestion" value="Delete" onclick="Globals.UserStoryContentOperations.MarkQuestionAsDeleted('@questionElementsGroup.GroupId')" />
                         </div>
@@ -84,7 +84,7 @@
         </div>
         @if (viewType == ViewType.EditExisting)
         {
-            <input type="hidden" asp-for="UserStoryId" />
+            <input type="hidden" asp-for="Id" />
         }
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

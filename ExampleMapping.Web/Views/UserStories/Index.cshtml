@@ -18,7 +18,7 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td><div id="StoryName"><a asp-controller="UserStories" asp-action="Edit" asp-route-id="@item.UserStoryId">@item.Name</a></div></td>
+            <td><div id="StoryName"><a asp-controller="UserStories" asp-action="Edit" asp-route-id="@item.Id">@item.Name</a></div></td>
         </tr>
     }
 </table>

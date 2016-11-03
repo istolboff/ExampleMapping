@@ -2,10 +2,8 @@
 {
     public class Question
     {
-        public long QuestionId { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
-
-        public UserStory UserStory { get; set; }
     }
 }

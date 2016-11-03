@@ -61,9 +61,9 @@ namespace ExampleMapping.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long userStoryId, UserStory userStory)
+        public async Task<IActionResult> Edit(long id, UserStory userStory)
         {
-            if (userStoryId != userStory.UserStoryId)
+            if (id != userStory.Id)
             {
                 return NotFound();
             }
@@ -79,30 +79,30 @@ namespace ExampleMapping.Web.Controllers
                 var rulesWithExamples = rules.Where(rule => rule.Examples != null).AsImmutable();
                 var exampleIdsToDelete = rulesWithExamples
                     .SelectMany(rule => rule.Examples)
-                    .Where(example => example.ExampleId < 0)
-                    .Select(example => -example.ExampleId).ToArray();
+                    .Where(example => example.Id < 0)
+                    .Select(example => -example.Id).ToArray();
                 foreach (var rule in rulesWithExamples)
                 {
-                    rule.Examples.RemoveIf(example => example.ExampleId < 0);
+                    rule.Examples.RemoveIf(example => example.Id < 0);
                 }
 
-                var ruleIdsToDelete = rules.Where(rule => rule.RuleId < 0).Select(rule => -rule.RuleId).ToArray();
-                rules.RemoveIf(rule => rule.RuleId < 0);
+                var ruleIdsToDelete = rules.Where(rule => rule.Id < 0).Select(rule => -rule.Id).ToArray();
+                rules.RemoveIf(rule => rule.Id < 0);
 
                 var questions = userStory.Questions ?? new List<Question>();
-                var questionIdsToDelete = questions.Where(question => question.QuestionId < 0).Select(question => -question.QuestionId).ToArray();
-                questions.RemoveIf(question => question.QuestionId < 0);
+                var questionIdsToDelete = questions.Where(question => question.Id < 0).Select(question => -question.Id).ToArray();
+                questions.RemoveIf(question => question.Id < 0);
 
                 _exampleMappingContext.Update(userStory);
-                _exampleMappingContext.Examples.RemoveIf(example => Array.IndexOf(exampleIdsToDelete, example.ExampleId) >= 0);
-                _exampleMappingContext.Rules.RemoveIf(rule => Array.IndexOf(ruleIdsToDelete, rule.RuleId) >= 0);
-                _exampleMappingContext.Questions.RemoveIf(question => Array.IndexOf(questionIdsToDelete, question.QuestionId) >= 0);
+                _exampleMappingContext.Examples.RemoveIf(example => Array.IndexOf(exampleIdsToDelete, example.Id) >= 0);
+                _exampleMappingContext.Rules.RemoveIf(rule => Array.IndexOf(ruleIdsToDelete, rule.Id) >= 0);
+                _exampleMappingContext.Questions.RemoveIf(question => Array.IndexOf(questionIdsToDelete, question.Id) >= 0);
 
                 await _exampleMappingContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (await _exampleMappingContext.FindUserStoryById(userStoryId) != null)
+                if (await _exampleMappingContext.FindUserStoryById(id) != null)
                 {
                     throw;
                 }
