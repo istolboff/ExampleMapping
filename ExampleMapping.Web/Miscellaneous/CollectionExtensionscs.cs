@@ -14,17 +14,19 @@ namespace ExampleMapping.Web.Miscellaneous
             return @this as IReadOnlyCollection<T> ?? @this.ToList();
         }
 
-        public static void RemoveRange<T>(this ICollection<T> @this, IReadOnlyCollection<T> elementsToRemove)
+        public static void RemoveIf<T>(this ICollection<T> @this, Func<T, bool> predicate)
+        {
+            Contract.Requires(@this != null);
+
+            @this.RemoveRange(@this.Where(predicate).AsImmutable());
+        }
+
+        private static void RemoveRange<T>(this ICollection<T> @this, IEnumerable<T> elementsToRemove)
         {
             foreach (var element in elementsToRemove)
             {
                 @this.Remove(element);
             }
-        }
-
-        public static void RemoveIf<T>(this ICollection<T> @this, Func<T, bool> predicate)
-        {
-            @this.RemoveRange(@this.Where(predicate).AsImmutable());
         }
     }
 }

@@ -76,24 +76,23 @@ namespace ExampleMapping.Web.Controllers
             try
             {
                 var rules = userStory.Rules ?? new List<Rule>();
+
                 var rulesWithExamples = rules.Where(rule => rule.Examples != null).AsImmutable();
-                var exampleIdsToDelete = rulesWithExamples
-                    .SelectMany(rule => rule.Examples)
-                    .Where(example => example.Id < 0)
-                    .Select(example => -example.Id).ToArray();
+                var exampleIdsToDelete = rulesWithExamples.SelectMany(rule => rule.Examples).GetIdsOfEntitiesMarkedForDeletion();
                 foreach (var rule in rulesWithExamples)
                 {
-                    rule.Examples.RemoveIf(example => example.Id < 0);
+                    rule.Examples.RemoveEntitiesMarkedForDeletion();
                 }
 
-                var ruleIdsToDelete = rules.Where(rule => rule.Id < 0).Select(rule => -rule.Id).ToArray();
-                rules.RemoveIf(rule => rule.Id < 0);
+                var ruleIdsToDelete = rules.GetIdsOfEntitiesMarkedForDeletion();
+                rules.RemoveEntitiesMarkedForDeletion();
 
                 var questions = userStory.Questions ?? new List<Question>();
-                var questionIdsToDelete = questions.Where(question => question.Id < 0).Select(question => -question.Id).ToArray();
-                questions.RemoveIf(question => question.Id < 0);
+                var questionIdsToDelete = questions.GetIdsOfEntitiesMarkedForDeletion();
+                questions.RemoveEntitiesMarkedForDeletion();
 
                 _exampleMappingContext.Update(userStory);
+
                 _exampleMappingContext.Examples.RemoveIf(example => Array.IndexOf(exampleIdsToDelete, example.Id) >= 0);
                 _exampleMappingContext.Rules.RemoveIf(rule => Array.IndexOf(ruleIdsToDelete, rule.Id) >= 0);
                 _exampleMappingContext.Questions.RemoveIf(question => Array.IndexOf(questionIdsToDelete, question.Id) >= 0);

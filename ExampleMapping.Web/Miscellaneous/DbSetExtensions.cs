@@ -8,7 +8,7 @@ namespace ExampleMapping.Web.Miscellaneous
     {
         public static void RemoveIf<TEntity>(this DbSet<TEntity> @this, Func<TEntity, bool> predicate) where TEntity : class
         {
-            var entitiesToRemove = @this.Where(predicate).AsImmutable();
+            var entitiesToRemove = @this.Where(predicate).ToArray();
             @this.RemoveRange(entitiesToRemove);
         }
     }
