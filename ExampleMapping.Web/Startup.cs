@@ -14,17 +14,7 @@ namespace ExampleMapping.Web
     {
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
-            {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-            }
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
 
             Contract.Assume(_sqliteDatabaseFile == null);
             _sqliteDatabaseFile = EnsureDatabaseCreated(env);
@@ -39,29 +29,16 @@ namespace ExampleMapping.Web
         {
             Contract.Assume(_sqliteDatabaseFile != null);
             services.AddDbContext<ExampleMappingContext>(options => options.UseSqlite(@"Data Source=" + _sqliteDatabaseFile.FullName));
-            services.AddApplicationInsightsTelemetry(Configuration);
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            app.UseApplicationInsightsRequestTelemetry();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
 
@@ -73,7 +50,7 @@ namespace ExampleMapping.Web
             });
         }
 
-        private FileInfo EnsureDatabaseCreated(IHostingEnvironment env)
+        private static FileInfo EnsureDatabaseCreated(IHostingEnvironment env)
         {
             var contentRootDirectory = new DirectoryInfo(env.ContentRootPath);
             var databaseDirectory = contentRootDirectory.CreateSubdirectory("DataBase");

@@ -30,6 +30,11 @@ bin/
 obj/
 TestResults/
 ###################
+# project.lock.json#
+###################
+project.lock.json
+
+###################
 # Web publish log #
 ###################
 *.Publish.xml
