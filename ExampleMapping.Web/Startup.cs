@@ -2,10 +2,12 @@
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using React.AspNet;
 using ExampleMapping.Web.Models;
 
 namespace ExampleMapping.Web
@@ -29,6 +31,8 @@ namespace ExampleMapping.Web
         {
             Contract.Assume(_sqliteDatabaseFile != null);
             services.AddDbContext<ExampleMappingContext>(options => options.UseSqlite(@"Data Source=" + _sqliteDatabaseFile.FullName));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
             services.AddMvc();
         }
 
@@ -40,6 +44,7 @@ namespace ExampleMapping.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseReact(_ => {});
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "Microsoft.AspNetCore.Mvc": "1.0.0",
-    "Microsoft.AspNetCore.Diagnostics": "1.0.0"
+    "Microsoft.AspNetCore.Diagnostics": "1.0.0",
+    "React.AspNet": "3.0.0"
   },
   "frameworks": {
     "netcoreapp1.0": {
