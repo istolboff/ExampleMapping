@@ -7,18 +7,14 @@ var constRuleType = "95D959BF-8F42-4F22-BBDA-2CC38BFA9548";
 var constExampleType = "A24BC9D5-4DB9-42BF-86DE-E31C0C585044";
 var constQuestionType = "AA9B20EA-8C80-493D-AE16-5B77659C9FCD";
 
-class Example extends React.Component {
+class DeletableItemBase extends React.Component {
     constructor(props) {
         super(props);
         this.state = { data: props.data };
-        this.deleteExample = this.deleteExample.bind(this);
+        this.deleteSelf = this.deleteSelf.bind(this);
     }
 
-    componentDidMount() {
-        ReactDOM.findDOMNode(this.refs.newlyCreatedExample).focus();
-    }
-
-    deleteExample() {
+    deleteSelf() {
         this.setState(prevState => {
             if (this.state.data.Id) {
                 prevState.data.Id = -prevState.data.Id;
@@ -27,6 +23,16 @@ class Example extends React.Component {
             }
             return prevState;
         });
+    }
+}
+
+class Example extends DeletableItemBase {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        ReactDOM.findDOMNode(this.refs.newlyCreatedExample).focus();
     }
 
     render() {
@@ -43,7 +49,7 @@ class Example extends React.Component {
                        defaultValue={this.props.data.Name} 
                        placeholder="Enter example text here" 
                        ref="newlyCreatedExample" />
-                <input type="button" className="deleteExample" value="X" onClick={this.deleteExample}/>
+                <input type="button" className="deleteExample" value="X" onClick={this.deleteSelf}/>
             </div>);
     }
 }
@@ -55,26 +61,13 @@ function Examples(props) {
            }</div>;
 }
 
-class Rule extends React.Component {
+class Rule extends DeletableItemBase {
     constructor(props) {
         super(props);
-        this.state = { data: props.data };
-        this.deleteRule = this.deleteRule.bind(this);
     }
 
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.newlyCreatedRule).focus();
-    }
-
-    deleteRule() {
-        this.setState(prevState => {
-            if (this.state.data.Id) {
-                prevState.data.Id = -prevState.data.Id;
-            } else {
-                prevState.data.transientState = TransientState.Deleted;
-            }
-            return prevState;
-        });
     }
 
     render() {
@@ -106,7 +99,7 @@ class Rule extends React.Component {
                           name={"Rules[" + this.props.modelBindingRuleIndex + "].Name"} 
                           defaultValue={this.props.data.Name} 
                           placeholder="Enter rule text here" ref="newlyCreatedRule" />
-                   <input type="button" className="deleteRule" value="X" onClick={this.deleteRule} />
+                   <input type="button" className="deleteRule" value="X" onClick={this.deleteSelf} />
                    <Examples data={this.props.data.Examples} modelBindingRuleIndex={this.props.modelBindingRuleIndex} />
                 </div>);
     }
@@ -116,26 +109,13 @@ function Rules(props) {
     return <div>{ props.data.map((rule, ruleIndex) => <Rule key={ruleIndex} data={rule} modelBindingRuleIndex={ruleIndex} />) }</div>;
 }
 
-class Question extends React.Component {
+class Question extends DeletableItemBase {
     constructor(props) {
         super(props);
-        this.state = { data: props.data };
-        this.deleteQuestion = this.deleteQuestion.bind(this);
     }
 
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.newlyCreatedQuestion).focus();
-    }
-
-    deleteQuestion() {
-        this.setState(prevState => {
-            if (this.state.data.Id) {
-                prevState.data.Id = -prevState.data.Id;
-            } else {
-                prevState.data.transientState = TransientState.Deleted;
-            }
-            return prevState;
-        });
     }
 
     render() {
@@ -149,7 +129,7 @@ class Question extends React.Component {
                        defaultValue={this.props.data.Name} 
                        placeholder="Enter question text here" 
                        ref="newlyCreatedQuestion" />
-                <input type="button" className="deleteQuestion" value="X" onClick={this.deleteQuestion} />
+                <input type="button" className="deleteQuestion" value="X" onClick={this.deleteSelf} />
             </div>);
     }
 }
