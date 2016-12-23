@@ -50,9 +50,9 @@ class Example extends React.Component {
 
 function Examples(props) {
     return <div>{
-            props.data.map(function(example, exampleIndex) {
-                 return <Example key={exampleIndex} data={example} modelBindingRuleIndex={props.modelBindingRuleIndex} modelBindingExampleIndex={exampleIndex}/>;
-            })}</div>;
+            props.data.map((example, exampleIndex) => 
+                <Example key={exampleIndex} data={example} modelBindingRuleIndex={props.modelBindingRuleIndex} modelBindingExampleIndex={exampleIndex }/>)
+           }</div>;
 }
 
 class Rule extends React.Component {
@@ -113,7 +113,7 @@ class Rule extends React.Component {
 }
 
 function Rules(props) {
-    return <div>{ props.data.map(function (rule, ruleIndex) { return <Rule key={ruleIndex} data={rule} modelBindingRuleIndex={ruleIndex} /> }) }</div>;
+    return <div>{ props.data.map((rule, ruleIndex) => <Rule key={ruleIndex} data={rule} modelBindingRuleIndex={ruleIndex} />) }</div>;
 }
 
 class Question extends React.Component {
@@ -155,7 +155,7 @@ class Question extends React.Component {
 }
 
 function Questions(props) {
-    return <div>{ props.data.map(function (question, questionIndex) { return <Question key={questionIndex} data={question} modelBindingQuestionIndex={questionIndex}/> }) }</div>;
+    return <div>{ props.data.map((question, questionIndex) => <Question key={questionIndex} data={question} modelBindingQuestionIndex={questionIndex} />) }</div>;
 }
 
 function UserStory(props) {
