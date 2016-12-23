@@ -1,7 +1,7 @@
-﻿@using System.Linq
-@using System.Threading.Tasks
+﻿@using System.Threading.Tasks
 @using ExampleMapping.Web.Models
 @using ExampleMapping.Web.Views
+@using Newtonsoft.Json
 @model UserStory
 
 @{ 
@@ -9,6 +9,10 @@
     var pageTitle = viewType == ViewType.CreateNew ? "New User Story" : "Edit User Story";
     var editButtonContent = viewType == ViewType.CreateNew ? "Create" : "Save";
     var aspAction = viewType == ViewType.CreateNew ? "Create" : "Edit";
+
+    var initialDataAsJson = Json.Serialize(
+        Model ?? new UserStory { Name="", Rules = new List<Rule>(), Questions = new List<Question>() }, 
+        new JsonSerializerSettings { StringEscapeHandling = StringEscapeHandling.EscapeHtml });
 }
 
 <h2>@pageTitle</h2>
@@ -16,75 +20,10 @@
 <form asp-controller="UserStories" asp-action="@aspAction" method="post" class="form-horizontal" role="form">
     <div class="form-horizontal">
         <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10" id="UserStoryContent">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-                @{
-                    foreach (var ruleElementsGroup in (Model?.Rules ?? Enumerable.Empty<Rule>()).Select((rule, ruleIndex) =>
-                        new
-                        {
-                            RuleIndex = ruleIndex,
-                            GroupId = $"RuleElementsGroup_{rule.Id}",
-                            IdInputName = $"Rules[{ruleIndex}].Id",
-                            TextInputName = $"Rules[{ruleIndex}].Name",
-                            DeleteButtonName = $"DeleteRule_{ruleIndex}",
-                            AddExampleLinkName = $"AddExample_{ruleIndex}",
-                            Rule = rule
-                        }))
-                    {
-                        <div id="@ruleElementsGroup.GroupId" class="ruleElementsGroup" ondrop="Globals.DragDropProcessor.Drop(event, this)" ondragover="Globals.DragDropProcessor.DragOver(event, this)">
-                            <input type="hidden" id="RuleId" name="@ruleElementsGroup.IdInputName" value="@ruleElementsGroup.Rule.Id" />
-                            <input type="text" class="ruleWording" name="@ruleElementsGroup.TextInputName" value="@ruleElementsGroup.Rule.Name" />
-                            <input type="button" class="deleteRule" name="@ruleElementsGroup.DeleteButtonName" value="Delete" onclick="Globals.UserStoryContentOperations.MarkRuleAsDeleted('@ruleElementsGroup.GroupId')" />
-                            @{
-                                foreach (var indexedExample in (ruleElementsGroup.Rule.Examples ?? Enumerable.Empty<Example>()).Select((example, exampleIndex) =>
-                                    new
-                                    {
-                                        GroupId = $"ExampleElementsGroup_{exampleIndex}",
-                                        IdInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].Id",
-                                        TextInputName = $"Rules[{ruleElementsGroup.RuleIndex}].Examples[{exampleIndex}].Name",
-                                        Example = example
-                                    }))
-                                {
-                                    <div id="@indexedExample.GroupId" class="exampleElementsGroup">
-                                        <input type="hidden" id="ExampleId" name="@indexedExample.IdInputName" value="@indexedExample.Example.Id" />
-                                        <input type="text" class="exampleWording" name="@indexedExample.TextInputName" value="@indexedExample.Example.Name" />
-                                        <input type="button" class="deleteExample" value="Delete" onclick="Globals.UserStoryContentOperations.MarkExampleAsDeleted('@indexedExample.GroupId')" />
-                                    </div>
-                                }
-                            }
-                        </div>
-                     }
-
-                    foreach (var questionElementsGroup in (Model?.Questions ?? Enumerable.Empty<Question>()).Select((question, questionIndex) =>
-                        new
-                        {
-                            QuestionIndex = questionIndex,
-                            GroupId = $"QuestionElementsGroup_{question.Id}",
-                            IdInputName = $"Questions[{questionIndex}].Id",
-                            TextInputName = $"Questions[{questionIndex}].Name",
-                            Question = question
-                        }))
-                    {
-                        <div id="@questionElementsGroup.GroupId" class="questionElementsGroup">
-                            <input type="hidden" id="QuestionId" name="@questionElementsGroup.IdInputName" value="@questionElementsGroup.Question.Id" />
-                            <input type="text" class="questionWording" name="@questionElementsGroup.TextInputName" value="@questionElementsGroup.Question.Name" />
-                            <input type="button" class="deleteQuestion" value="Delete" onclick="Globals.UserStoryContentOperations.MarkQuestionAsDeleted('@questionElementsGroup.GroupId')" />
-                        </div>
-                    }
-                }
-            </div>
-        </div>
-        <div>
-            <a id="AddNewRule" href="javascript:Globals.UserStoryContentOperations.AddBlankRule()">Rule Blanks</a>
-            <a id="AddNewExample" href="#" draggable="true" ondragstart="Globals.DragDropProcessor.StartDraggingBlankExample(event)">Add Example</a>
-            <a id="AddNewQuestion" href="javascript:Globals.UserStoryContentOperations.AddBlankQuestion()">Add Question</a>
-        </div>
+        <div id="content"></div>
         @if (viewType == ViewType.EditExisting)
         {
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
         }
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -93,3 +32,9 @@
         </div>
     </div>
 </form>
+<script>
+    ReactDOM.render(
+        React.createElement(UserStoryEditForm, { data: @initialDataAsJson }),
+        document.getElementById('content')
+    );
+</script>
