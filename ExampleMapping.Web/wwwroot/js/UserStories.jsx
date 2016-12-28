@@ -42,13 +42,13 @@ class Example extends DeletableItemBase {
                        type="hidden" 
                        name={"Rules[" + this.props.modelBindingRuleIndex + "].Examples[" + this.props.modelBindingExampleIndex + "].Id"} 
                        defaultValue={this.props.data.Id} />
-                <input 
+                <textarea 
                        className="exampleWording" 
-                       type="text" 
                        name={"Rules[" + this.props.modelBindingRuleIndex + "].Examples[" + this.props.modelBindingExampleIndex + "].Name"}
-                       defaultValue={this.props.data.Name} 
                        placeholder="Enter example text here" 
-                       ref="newlyCreatedExample" />
+                       ref="newlyCreatedExample">
+                    {this.props.data.Name}
+                </textarea>
                 <input type="button" className="deleteExample" value="X" onClick={this.deleteSelf}/>
             </div>);
     }
@@ -94,11 +94,12 @@ class Rule extends DeletableItemBase {
                         }
                     }>
                    <input type="hidden" name={"Rules[" + this.props.modelBindingRuleIndex + "].Id"} defaultValue={this.props.data.Id} />
-                   <input className="ruleWording" 
+                   <textarea className="ruleWording" 
                           type="text" 
                           name={"Rules[" + this.props.modelBindingRuleIndex + "].Name"} 
-                          defaultValue={this.props.data.Name} 
-                          placeholder="Enter rule text here" ref="newlyCreatedRule" />
+                          placeholder="Enter rule text here" ref="newlyCreatedRule" >
+                       {this.props.data.Name}
+                   </textarea>
                    <input type="button" className="deleteRule" value="X" onClick={this.deleteSelf} />
                    <Examples data={this.props.data.Examples} modelBindingRuleIndex={this.props.modelBindingRuleIndex} />
                 </div>);
@@ -122,13 +123,14 @@ class Question extends DeletableItemBase {
         return ((this.state.data.transientState !== TransientState.Deleted || this.state.data.Id < 0) && 
             <div className="questionElementsGroup">
                 <input type="hidden" name={"Questions[" + this.props.modelBindingQuestionIndex + "].Id"} defaultValue={this.props.data.Id} />
-                <input 
+                <textarea 
                        className="questionWording" 
                        type="text" 
                        name={"Questions[" + this.props.modelBindingQuestionIndex + "].Name"}
-                       defaultValue={this.props.data.Name} 
                        placeholder="Enter question text here" 
-                       ref="newlyCreatedQuestion" />
+                       ref="newlyCreatedQuestion" >
+                    {this.props.data.Name}
+                </textarea>
                 <input type="button" className="deleteQuestion" value="X" onClick={this.deleteSelf} />
             </div>);
     }
@@ -140,7 +142,7 @@ function Questions(props) {
 
 function UserStory(props) {
     return <div>
-                <div className="UserStoryName"><input type="text" name="Name" defaultValue={props.data.Name} /></div>
+                <div className="UserStoryName"><textarea type="text" name="Name">{props.data.Name}</textarea></div>
                 <Rules data={props.data.Rules} />
                 <Questions data={props.data.Questions} />
             </div>;
