@@ -106,7 +106,7 @@ class Rule extends DeletableItemBase {
 }
 
 function Rules(props) {
-    return <div>{ props.data.map((rule, ruleIndex) => <Rule key={ruleIndex} data={rule} modelBindingRuleIndex={ruleIndex} />) }</div>;
+    return <div className="RulesContainer">{ props.data.map((rule, ruleIndex) => <Rule key={ruleIndex} data={rule} modelBindingRuleIndex={ruleIndex} />) }</div>;
 }
 
 class Question extends DeletableItemBase {
@@ -135,19 +135,19 @@ class Question extends DeletableItemBase {
 }
 
 function Questions(props) {
-    return <div>{ props.data.map((question, questionIndex) => <Question key={questionIndex} data={question} modelBindingQuestionIndex={questionIndex} />) }</div>;
+    return <div className="QuestionsContainer">{ props.data.map((question, questionIndex) => <Question key={questionIndex} data={question} modelBindingQuestionIndex={questionIndex} />) }</div>;
 }
 
 function UserStory(props) {
     return <div>
-                <input type="text" name="Name" defaultValue={props.data.Name} />
+                <div className="UserStoryName"><input type="text" name="Name" defaultValue={props.data.Name} /></div>
                 <Rules data={props.data.Rules} />
                 <Questions data={props.data.Questions} />
             </div>;
 }
 
 function EditingControls(props) {
-    return <div>
+    return <div className="EditingControlsContainer">
                <a id="AddNewRule" href="#" onClick={props.addNewRule} onDragStart={dragEvent => dragEvent.dataTransfer.setData("text", constRuleType)}>Add Rule</a>
                <a id="AddNewExample" href="#" onDragStart={dragEvent => dragEvent.dataTransfer.setData("text", constExampleType)}>Add Example</a>
                <a id="AddNewQuestion" href="#" onClick={props.addNewQuestion} onDragStart={dragEvent => dragEvent.dataTransfer.setData("text", constQuestionType)}>Add Question</a>
@@ -179,7 +179,7 @@ class UserStoryEditForm extends React.Component {
     render() {
         return <div>
                     <UserStory data={this.state.data} />
-                    <EditingControls addNewRule={this.addNewRule} addNewQuestion={this.addNewQuestion}/>
+                    <EditingControls addNewRule={this.addNewRule} addNewQuestion={this.addNewQuestion} />
         </div>;
     }
 }

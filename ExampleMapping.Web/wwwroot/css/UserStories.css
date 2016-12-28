@@ -1,0 +1,43 @@
+﻿.UserStoryName {
+	text-align: center;
+}
+
+div.RulesContainer {
+	float: left;
+	width: 80%;
+}
+
+div.QuestionsContainer {
+	float: right;
+	width: 20%;
+}
+
+div.EditingControlsContainer {
+    clear: both;
+}
+
+div.ruleElementsGroup {
+	width: 20%;    
+	float: left;
+}
+
+@media only screen and (max-width : 480px) {
+   div.ruleElementsGroup {
+      width: 90%;
+   }
+}
+@media only screen and (max-width : 650px) and (min-width : 481px) {
+   div.ruleElementsGroup {
+      width: 75%;
+   }
+}
+@media only screen and (max-width : 1050px) and (min-width : 651px) {
+   div.ruleElementsGroup {
+      width: 45%;
+   }
+}
+@media only screen and (max-width : 1290px) and (min-width : 1051px) {
+   div.ruleElementsGroup {
+      width: 33.3%;
+   }
+}
