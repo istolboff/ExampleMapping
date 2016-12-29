@@ -95,7 +95,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
         private IEnumerable<RuleElementsGroup> GetRuleElementsGroups()
         {
             return Browser
-                .Elements<Div>(Find.ByClass("ruleElementsGroup"))
+                .Elements<Div>(Find.ByClass("Rule ElementsGroup"))
                 .Select(ruleGroupDiv => new RuleElementsGroup(ruleGroupDiv));
         }
 
@@ -107,7 +107,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
         private IEnumerable<QuestionElementsGroup> GetQuestionElementsGroups()
         {
             return Browser
-                .Elements<Div>(Find.ByClass("questionElementsGroup"))
+                .Elements<Div>(Find.ByClass("Question"))
                 .Select(questionGroupDiv => new QuestionElementsGroup(questionGroupDiv));
         }
 
@@ -121,9 +121,9 @@ namespace ExampleMapping.Specs.WebSut.Pages
         private readonly Link _addnewExampleLink;
         private readonly Link _addNewQuestionLink;
 
-        private static readonly Constraint RuleTextElementConstraint = Find.ByClass("ruleWording");
-        private static readonly Constraint ExampleTextElementConstraint = Find.ByClass("exampleWording");
-        private static readonly Constraint QuestionTextElementConstraint = Find.ByClass("questionWording");
+        private static readonly Constraint RuleTextElementConstraint = Find.ByClass("Rule Wording");
+        private static readonly Constraint ExampleTextElementConstraint = Find.ByClass("Example Wording");
+        private static readonly Constraint QuestionTextElementConstraint = Find.ByClass("Question Wording");
 
         private class RuleElementsGroup
         {
@@ -143,7 +143,7 @@ namespace ExampleMapping.Specs.WebSut.Pages
 
             public IEnumerable<ExampleElementsGroup> GetExampleElementsGroups()
             {
-                return _ruleGroupDiv.Elements<Div>(Find.ByClass("exampleElementsGroup")).Select(divElement => new ExampleElementsGroup(divElement));
+                return _ruleGroupDiv.Elements<Div>(Find.ByClass("Example")).Select(divElement => new ExampleElementsGroup(divElement));
             }
 
             public ExampleElementsGroup FindExampleElementsGroup(string exampleText)

@@ -118,6 +118,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ExamplesInsideSingleRuleManipulation.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\Helpers.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Helpers.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\QuestionsInsideSingleUserStoryManipulation.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -178,6 +183,10 @@
     <None Include="Features\ExamplesInsideSingleRuleManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ExamplesInsideSingleRuleManipulation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\Helpers.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Helpers.feature.cs</LastGenOutput>
     </None>
     <None Include="Features\QuestionsInsideSingleUserStoryManipulation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

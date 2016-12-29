@@ -1,5 +1,6 @@
 ﻿.UserStoryName {
-	text-align: center;
+	width: 15em;
+    margin: 0 auto;
 }
 
 div.RulesContainer {
@@ -16,28 +17,85 @@ div.EditingControlsContainer {
     clear: both;
 }
 
-div.ruleElementsGroup {
+div.ElementsGroup {
 	width: 20%;    
 	float: left;
+    margin: 0.6em 0.6em 0.6em 0.6em;
+}
+
+textarea.UserStory {
+	background: -webkit-linear-gradient(#F9EFAF, #F7E98D);
+	background: -moz-linear-gradient(#F9EFAF, #F7E98D);
+	background: -o-linear-gradient(#F9EFAF, #F7E98D);
+	background: -ms-linear-gradient(#F9EFAF, #F7E98D);
+	background: linear-gradient(#F9EFAF, #F7E98D);
+}
+
+textarea.Rule {
+	background: -webkit-linear-gradient(#B3E6FF, #66CCFF);
+	background: -moz-linear-gradient(#B3E6FF, #66CCFF);
+	background: -o-linear-gradient(#B3E6FF, #66CCFF);
+	background: -ms-linear-gradient(#B3E6FF, #66CCFF);
+	background: linear-gradient(#B3E6FF, #66CCFF);
+}
+
+textarea.Example {
+	background: -webkit-linear-gradient(#CCFF99, #B3FF66);
+	background: -moz-linear-gradient(#CCFF99, #B3FF66);
+	background: -o-linear-gradient(#CCFF99, #B3FF66);
+	background: -ms-linear-gradient(#CCFF99, #B3FF66);
+	background: linear-gradient(#CCFF99, #B3FF66);
+}
+
+textarea.Question {
+	background: -webkit-linear-gradient(#FFCCCC, #FF8080);
+	background: -moz-linear-gradient(#FFCCCC, #FF8080);
+	background: -o-linear-gradient(#FFCCCC, #FF8080);
+	background: -ms-linear-gradient(#FFCCCC, #FF8080);
+	background: linear-gradient(#FFCCCC, #FF8080);
+}
+
+textarea.Wording { 
+    font: 1.8em 'Bad Script'; 
+    padding: 0.2em 0.2em 0.2em;
+    margin: 0 auto 20px auto;
+	width: 100%; 
+	height: 100%;
+	overflow:auto;
+	line-height:1;
+	height:5em;   
+	border:0;
+	border-radius:3px;
+	box-shadow:0 4px 6px rgba(0,0,0,0.1);
+	transition:box-shadow 0.5s ease;
+	font-smoothing:subpixel-antialiased;
 }
 
 @media only screen and (max-width : 480px) {
-   div.ruleElementsGroup {
-      width: 90%;
-   }
+    div.ElementsGroup {
+        width: 100%;
+        float: left;
+        margin: 0.6em 0.6em 0.6em 0.6em;
+    }
 }
 @media only screen and (max-width : 650px) and (min-width : 481px) {
-   div.ruleElementsGroup {
-      width: 75%;
-   }
+    div.ElementsGroup {
+        width: 50%;
+        float: left;
+        margin: 0.6em 0.6em 0.6em 0.6em;
+    }
 }
 @media only screen and (max-width : 1050px) and (min-width : 651px) {
-   div.ruleElementsGroup {
-      width: 45%;
-   }
+    div.ElementsGroup {
+        width: 33.3%;
+        float: left;
+        margin: 0.6em 0.6em 0.6em 0.6em;
+    }
 }
 @media only screen and (max-width : 1290px) and (min-width : 1051px) {
-   div.ruleElementsGroup {
-      width: 33.3%;
-   }
+    div.ElementsGroup {
+        width: 25%;
+        float: left;
+        margin: 0.6em 0.6em 0.6em 0.6em;
+    }
 }
